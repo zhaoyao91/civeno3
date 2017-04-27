@@ -9,7 +9,8 @@
       "lodash",
       {
         "id": [
-          "lodash"
+          "lodash",
+          "semantic-ui-react"
         ]
       }
     ]
