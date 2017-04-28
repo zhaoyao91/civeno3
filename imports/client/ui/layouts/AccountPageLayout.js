@@ -12,7 +12,7 @@ const AccountPageLayout = ({children}) => (
     <div style={{minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
       <div>
         <div style={{display: 'flex', justifyContent: 'center'}}>
-          <Header size="huge">CIVENO 会米办公</Header>
+          <Header size="huge" style={{marginBottom: '1em'}}>CIVENO 会米</Header>
         </div>
         <div>{children}</div>
       </div>
