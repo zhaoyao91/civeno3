@@ -12,6 +12,7 @@ const App = () => (
     <Router>
       <div>
         <Route exact path="/" component={lazyLoad(() => import('./pages/IndexPage'))}/>
+        <Route exact path="/signup" component={lazyLoad(() => import('./pages/SignupPage'))}/>
       </div>
     </Router>
   </div>
