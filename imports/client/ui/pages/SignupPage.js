@@ -1,9 +1,11 @@
 import React from 'react'
 
+import AccountPageLayout from '../layouts/AccountPageLayout'
+
 const SignupPage = () => (
-  <div>
+  <AccountPageLayout>
     <h1>Signup Page</h1>
-  </div>
+  </AccountPageLayout>
 )
 
 export default SignupPage
