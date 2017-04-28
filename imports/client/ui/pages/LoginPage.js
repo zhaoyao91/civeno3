@@ -2,25 +2,25 @@ import React from 'react'
 import { Segment, Form, Button } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import { compose, withState, withHandlers } from 'recompose'
-import { Accounts } from 'meteor/accounts-base'
+import { Meteor } from 'meteor/meteor'
 import Alert from 'react-s-alert'
 
 import AccountPageLayout from '../layouts/AccountPageLayout'
 
-const SignupPage = () => (
+const LoginPage = () => (
   <AccountPageLayout>
     <Segment style={{minWidth: '18em'}}>
       <div style={{marginBottom: '1em'}}>
-        <SignupForm/>
+        <LoginForm/>
       </div>
       <Links/>
     </Segment>
   </AccountPageLayout>
 )
 
-export default SignupPage
+export default LoginPage
 
-const SignupForm = compose(
+const LoginForm = compose(
   withState('email', 'setEmail', ''),
   withState('password', 'setPassword', ''),
   withHandlers({
@@ -35,16 +35,18 @@ const SignupForm = compose(
         return Alert.error('请输入密码')
       }
 
-      Accounts.createUser({email, password}, (err) => {
+      Meteor.loginWithPassword(email, password, (err) => {
         if (err) {
           console.error(err)
-          if (err.reason === 'Email already exists.') {
-            Alert.error('该邮箱已经被占用')
+          if (err.reason === 'User not found') {
+            Alert.error('该用户尚未注册')
+          } else if (err.reason === 'Incorrect password') {
+            Alert.error('密码错误')
           } else {
-            Alert.error('注册失败')
+            Alert.error('登录失败')
           }
         } else {
-          Alert.success('注册成功')
+          Alert.success('登录成功')
         }
       })
     }
@@ -53,13 +55,13 @@ const SignupForm = compose(
   <Form onSubmit={onSubmit}>
     <Form.Input type="email" label="邮箱" value={email} onChange={onEmailChange}/>
     <Form.Input type="password" label="密码" value={password} onChange={onPasswordChange}/>
-    <Button fluid primary type="submit">注册</Button>
+    <Button fluid color="green" type="submit">登录</Button>
   </Form>
 ))
 
 const Links = () => (
   <div style={{display: 'flex', justifyContent: 'space-between'}}>
-    <Link to="/login">前往登录</Link>
+    <Link to="/signup">前往注册</Link>
     <Link to="/forgot-password">找回密码</Link>
   </div>
 )
