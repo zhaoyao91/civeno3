@@ -1,14 +1,12 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import createBrowserHistory from 'history/createBrowserHistory'
 
-import App from './ui/App'
+import renderApp from './boot/render_app'
+import configAccounts from './boot/config_accounts'
+import importStyles from './boot/import_styles'
 
-// import semantic styles
-import 'semantic-ui-css/semantic.min.css'
+importStyles()
 
-// import s-alert styles
-import 'react-s-alert/dist/s-alert-default.css'
-import 'react-s-alert/dist/s-alert-css-effects/slide.css'
+const history = createBrowserHistory()
 
-// render react app
-ReactDOM.render(<App/>, document.getElementById('react-root'))
+configAccounts(history)
+renderApp(history)

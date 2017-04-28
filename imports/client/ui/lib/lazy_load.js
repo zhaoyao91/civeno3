@@ -27,8 +27,12 @@ export default function (load) {
         load()
           .then(mod => Component = mod.default)
           .catch(err => console.error(err))
-          .then(() => this.setState({loading: false}))
+          .then(() => !this._isUnmouned && this.setState({loading: false}))
       }
+    }
+
+    componentWillUnmount () {
+      this._isUnmouned = true
     }
 
     render () {

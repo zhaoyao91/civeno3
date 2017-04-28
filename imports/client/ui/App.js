@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-  BrowserRouter as Router,
+  Router,
   Route,
   Switch,
 } from 'react-router-dom'
@@ -13,16 +13,18 @@ const IndexPage = lazyLoad(() => import('./pages/IndexPage'))
 const SignupPage = lazyLoad(() => import('./pages/SignupPage'))
 const LoginPage = lazyLoad(() => import('./pages/LoginPage'))
 const ForgotPasswordPage = lazyLoad(() => import('./pages/ForgotPasswordPage'))
+const ResetPasswordPage = lazyLoad(() => import('./pages/ResetPasswordPage'))
 
 // used to hold all global components and top level routes
-const App = () => (
+const App = ({history}) => (
   <div>
-    <Router>
+    <Router history={history}>
       <Switch>
         <Route exact path="/" component={IndexPage}/>
         <Route path="/signup" component={SignupPage}/>
         <Route path="/login" component={LoginPage}/>
         <Route path="/forgot-password" component={ForgotPasswordPage}/>
+        <Route path="/reset-password/:token" component={ResetPasswordPage}/>
         <Route component={NotFoundPage}/>
       </Switch>
     </Router>
