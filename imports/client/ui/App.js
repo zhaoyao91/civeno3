@@ -12,6 +12,7 @@ const NotFoundPage = lazyLoad(() => import('./pages/NotFoundPage'))
 const IndexPage = lazyLoad(() => import('./pages/IndexPage'))
 const SignupPage = lazyLoad(() => import('./pages/SignupPage'))
 const LoginPage = lazyLoad(() => import('./pages/LoginPage'))
+const ForgotPasswordPage = lazyLoad(() => import('./pages/ForgotPasswordPage'))
 
 // used to hold all global components and top level routes
 const App = () => (
@@ -19,8 +20,9 @@ const App = () => (
     <Router>
       <Switch>
         <Route exact path="/" component={IndexPage}/>
-        <Route exact path="/signup" component={SignupPage}/>
-        <Route exact path="/login" component={LoginPage}/>
+        <Route path="/signup" component={SignupPage}/>
+        <Route path="/login" component={LoginPage}/>
+        <Route path="/forgot-password" component={ForgotPasswordPage}/>
         <Route component={NotFoundPage}/>
       </Switch>
     </Router>
