@@ -22,26 +22,31 @@ export default function (load) {
       loading: !Component,
     }
 
-    componentWillMount () {
+    async componentWillMount () {
       if (!Component) {
-        load()
-          .then(mod => Component = mod.default)
-          .catch(err => console.error(err))
-          .then(() => !this._isUnmouned && this.setState({loading: false}))
+        try {
+          const mod = await load()
+          Component = mod.default
+        } catch (err) {
+          console.error(err)
+        }
+        if (!this._isUnmounted) {
+          this.setState({loading: false})
+        }
       }
     }
 
     componentWillUnmount () {
-      this._isUnmouned = true
+      this._isUnmounted = true
     }
 
     render () {
       const {loading} = this.state
 
-      if (!loading && Component) {
-        return <Component {...this.props}/>
-      } else if (loading && !Component) {
+      if (loading) {
         return <LoadingComp/>
+      } else if (Component) {
+        return <Component {...this.props}/>
       } else {
         return <ErrorComp/>
       }
