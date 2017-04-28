@@ -2,6 +2,7 @@ import React from 'react'
 import {
   BrowserRouter as Router,
   Route,
+  Switch,
 } from 'react-router-dom'
 
 import lazyLoad from './lib/lazy_load'
@@ -10,10 +11,11 @@ import lazyLoad from './lib/lazy_load'
 const App = () => (
   <div>
     <Router>
-      <div>
+      <Switch>
         <Route exact path="/" component={lazyLoad(() => import('./pages/IndexPage'))}/>
         <Route exact path="/signup" component={lazyLoad(() => import('./pages/SignupPage'))}/>
-      </div>
+        <Route component={lazyLoad(() => import('./pages/NotFoundPage'))}/>
+      </Switch>
     </Router>
   </div>
 )
