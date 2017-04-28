@@ -6,7 +6,7 @@ import { compose, withProps } from 'recompose'
 
 const AccountPageLayout = ({children}) => (
   <div>
-    <div style={{float: 'right'}}>
+    <div style={{position: 'absolute', right: '1em', top: '1em'}}>
       <TopLinks/>
     </div>
     <div style={{minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
@@ -30,7 +30,7 @@ const TopLinks = compose(
     ]
   })
 )(({links}) => (
-  <div style={{padding: '1em'}}>
+  <div>
     {
       links.map((link, index) => (
         <span key={index}>
