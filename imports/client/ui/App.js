@@ -4,13 +4,15 @@ import {
   Route,
 } from 'react-router-dom'
 
-import IndexPage from './pages/IndexPage'
+import lazyLoad from './lib/lazy_load'
 
 // used to hold all global components and top level routes
 const App = () => (
   <div>
     <Router>
-      <Route exact path="/" component={IndexPage}/>
+      <div>
+        <Route exact path="/" component={lazyLoad(() => import('./pages/IndexPage'))}/>
+      </div>
     </Router>
   </div>
 )
