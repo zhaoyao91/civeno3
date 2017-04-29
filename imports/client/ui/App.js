@@ -7,6 +7,7 @@ import {
 import Alert from 'react-s-alert'
 
 import lazyLoad from './lib/lazy_load'
+import requireAuth from './hocs/require_auth'
 
 const NotFoundPage = lazyLoad(() => import('./pages/NotFoundPage'))
 const IndexPage = lazyLoad(() => import('./pages/IndexPage'))
@@ -14,6 +15,7 @@ const SignupPage = lazyLoad(() => import('./pages/SignupPage'))
 const LoginPage = lazyLoad(() => import('./pages/LoginPage'))
 const ForgotPasswordPage = lazyLoad(() => import('./pages/ForgotPasswordPage'))
 const ResetPasswordPage = lazyLoad(() => import('./pages/ResetPasswordPage'))
+const FlowsPage = requireAuth(lazyLoad(() => import('./pages/FlowsPage')))
 
 // used to hold all global components and top level routes
 const App = ({history}) => (
@@ -21,10 +23,11 @@ const App = ({history}) => (
     <Router history={history}>
       <Switch>
         <Route exact path="/" component={IndexPage}/>
-        <Route path="/signup" component={SignupPage}/>
-        <Route path="/login" component={LoginPage}/>
-        <Route path="/forgot-password" component={ForgotPasswordPage}/>
-        <Route path="/reset-password/:token" component={ResetPasswordPage}/>
+        <Route exact path="/signup" component={SignupPage}/>
+        <Route exact path="/login" component={LoginPage}/>
+        <Route exact path="/forgot-password" component={ForgotPasswordPage}/>
+        <Route exact path="/reset-password/:token" component={ResetPasswordPage}/>
+        <Route exact path="/flows" component={FlowsPage}/>
         <Route component={NotFoundPage}/>
       </Switch>
     </Router>
