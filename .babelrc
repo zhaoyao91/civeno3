@@ -5,6 +5,14 @@
     "stage-0"
   ],
   "plugins": [
-    "lodash"
+    [
+      "lodash",
+      {
+        "id": [
+          "lodash",
+          "recompose"
+        ]
+      }
+    ]
   ]
 }
