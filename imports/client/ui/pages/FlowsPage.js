@@ -1,11 +1,11 @@
 import React from 'react'
 
-import MainLayout from '../layouts/MainLayout'
+import MainTopLayout from '../layouts/MainTopLayout'
 
 const FlowsPage = () => (
-  <MainLayout>
+  <MainTopLayout>
     <h1>Flows Page</h1>
-  </MainLayout>
+  </MainTopLayout>
 )
 
 export default FlowsPage
