@@ -6,7 +6,7 @@ const MainLayout = ({children}) => (
   <div style={{width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column'}}>
     <div><MainNavBar/></div>
     <div style={{flexGrow: 1, display: 'flex'}}>
-      <div style={{flexGrow: 1}}>{children}</div>
+      <div style={{flexGrow: 1, overflow: 'auto'}}>{children}</div>
     </div>
   </div>
 )
