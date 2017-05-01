@@ -1,8 +1,10 @@
 import React from 'react'
 import { Card } from 'semantic-ui-react'
 import { flatten } from 'lodash/fp'
+import { compose, withState, withHandlers } from 'recompose'
 
 import MainTopLayout from '../layouts/MainTopLayout'
+import CreateFlowModal from '../views/CreateFlowModal'
 
 const FlowsPage = () => (
   <MainTopLayout>
@@ -24,16 +26,17 @@ const CardLayout = ({children}) => (
   </div>
 )
 
-const FlowCard = ({children}) => (
-  <Card style={{width: '300px', height: '170px'}}>
-    {children}
-  </Card>
-)
-
-const CreateFlowCard = () => (
-  <FlowCard>
+const CreateFlowCard = compose(
+  withState('modalVisible', 'setModalVisible', false),
+  withHandlers({
+    openModal: ({setModalVisible}) => () => setModalVisible(true),
+    closeModal: ({setModalVisible}) => () => setModalVisible(false),
+  }),
+)(({modalVisible, openModal, closeModal}) => (
+  <Card style={{width: '300px', height: '170px'}} onClick={openModal}>
     <Card.Content style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
       <Card.Header>创建流程</Card.Header>
     </Card.Content>
-  </FlowCard>
-)
+    <CreateFlowModal open={modalVisible} onOpen={openModal} onClose={closeModal}/>
+  </Card>
+))
