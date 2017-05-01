@@ -1,5 +1,6 @@
 import React from 'react'
 import { Card } from 'semantic-ui-react'
+import { flatten } from 'lodash/fp'
 
 import MainTopLayout from '../layouts/MainTopLayout'
 
@@ -16,7 +17,7 @@ export default FlowsPage
 const CardLayout = ({children}) => (
   <div style={{padding: '1em', overflow: 'auto'}}>
     {
-      children.map((card, index) => (
+      flatten([children]).map((card, index) => (
         <div key={index} style={{float: 'left', marginRight: '1em', marginBottom: '1em'}}>{card}</div>
       ))
     }
