@@ -20,6 +20,9 @@ Meteor.methods({
 
     PermissionService.isAuthenticated(this.userId)
 
-    return FlowService.createFlow(flow)
+    return FlowService.createFlow({
+      ...flow,
+      owner: this.userId,
+    })
   }
 })
