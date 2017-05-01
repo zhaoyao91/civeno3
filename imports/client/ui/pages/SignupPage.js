@@ -1,6 +1,6 @@
 import React from 'react'
 import { Segment, Form, Button } from 'semantic-ui-react'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import { compose, withState, withHandlers } from 'recompose'
 import { Accounts } from 'meteor/accounts-base'
 import Alert from 'react-s-alert'
@@ -23,10 +23,11 @@ export default SignupPage
 const SignupForm = compose(
   withState('email', 'setEmail', ''),
   withState('password', 'setPassword', ''),
+  withRouter,
   withHandlers({
     onEmailChange: ({setEmail}) => e => setEmail(e.target.value),
     onPasswordChange: ({setPassword}) => e => setPassword(e.target.value),
-    onSubmit: ({email, password}) => e => {
+    onSubmit: ({email, password, history}) => e => {
       e.preventDefault()
 
       if (!email) {
@@ -45,6 +46,7 @@ const SignupForm = compose(
           }
         } else {
           Alert.success('注册成功')
+          history.push('/')
         }
       })
     }

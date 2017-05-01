@@ -1,9 +1,8 @@
 import React from 'react'
+import { Redirect } from 'react-router-dom'
 
 const IndexPage = () => (
-  <div>
-    <h1>Index Page</h1>
-  </div>
+  <Redirect to="/flows"/>
 )
 
 export default IndexPage
