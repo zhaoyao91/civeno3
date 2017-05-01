@@ -1,4 +1,0 @@
-/* make s-alert above the modal shadow */
-.s-alert-box {
-  z-index: 1001 !important;
-}

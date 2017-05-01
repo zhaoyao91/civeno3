@@ -22,3 +22,5 @@ accounts-password
 react-meteor-data
 check
 aldeed:collection2-core@2.0.0
+semantic:ui
+less
