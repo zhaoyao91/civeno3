@@ -20,3 +20,5 @@ static-html
 dynamic-import@0.1.0-beta.17
 accounts-password
 react-meteor-data
+check
+aldeed:collection2-core@2.0.0

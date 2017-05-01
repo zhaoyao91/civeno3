@@ -4,6 +4,7 @@ import { setPropTypes, compose, withState, withHandlers, lifecycle } from 'recom
 import { assoc } from 'lodash/fp'
 import PropTypes from 'prop-types'
 import Alert from 'react-s-alert'
+import { Meteor } from 'meteor/meteor'
 
 const emptyFlow = {name: '', description: ''}
 
@@ -30,9 +31,21 @@ export default compose(
   withState('submitting', 'setSubmitting', false),
   withHandlers({
     onCreateFlow: ({flow, setSubmitting, onClose}) => () => {
+      if (!flow.name) {
+        return Alert.error('请如输入流程名称')
+      }
+
       setSubmitting(true)
-      console.log(flow)
-      setSubmitting(false)
+      Meteor.call('Flow.createFlow', flow, (err, flowId) => {
+        setSubmitting(false)
+        if (err) {
+          console.error(err)
+          Alert.error('流程创建失败')
+        } else {
+          Alert.success('流程创建成功')
+          onClose()
+        }
+      })
     }
   }),
   withHandlers({
@@ -42,11 +55,11 @@ export default compose(
     }
   })
 )(({trigger, open, onOpen, onClose, flow, onNameChange, onDescriptionChange, onSubmit, onCreateFlow, submitting}) => (
-  <Modal size="small" open={open} trigger={trigger} onOpen={onOpen} onClose={onClose}>
+  <Modal size="small" open={open} trigger={trigger} onOpen={onOpen} onClose={onClose} closeIcon='close'>
     <Modal.Header content='创建流程'/>
     <Modal.Content>
       <Form loading={submitting} onSubmit={onSubmit}>
-        <Form.Input label="流程名称" value={flow.name} onChange={onNameChange}/>
+        <Form.Input required label="流程名称" value={flow.name} onChange={onNameChange}/>
         <Form.TextArea autoHeight label="流程描述" value={flow.description} onChange={onDescriptionChange}/>
       </Form>
     </Modal.Content>
