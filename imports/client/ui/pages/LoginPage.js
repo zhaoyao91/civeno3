@@ -9,8 +9,8 @@ import AccountPageLayout from '../layouts/AccountPageLayout'
 
 const LoginPage = () => (
   <AccountPageLayout>
-    <Segment style={{minWidth: '18em'}}>
-      <div style={{marginBottom: '1em'}}>
+    <Segment style={{minWidth: '18rem'}}>
+      <div style={{marginBottom: '1rem'}}>
         <LoginForm/>
       </div>
       <Links/>

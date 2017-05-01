@@ -17,10 +17,10 @@ const FlowsPage = () => (
 export default FlowsPage
 
 const CardLayout = ({children}) => (
-  <div style={{padding: '1em', height: '100%', overflow: 'auto'}}>
+  <div style={{padding: '1rem', height: '100%', overflow: 'auto'}}>
     {
       flatten([children]).map((card, index) => (
-        <div key={index} style={{float: 'left', marginRight: '1em', marginBottom: '1em'}}>{card}</div>
+        <div key={index} style={{float: 'left', marginRight: '1rem', marginBottom: '1rem'}}>{card}</div>
       ))
     }
   </div>
@@ -35,7 +35,7 @@ const CreateFlowCard = compose(
 )(({modalVisible, openModal, closeModal}) => (
   <Card style={{width: '300px', height: '170px'}} onClick={openModal}>
     <Card.Content style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-      <Card.Header>创建流程</Card.Header>
+      <p style={{fontSize: '2rem', color: 'initial'}}>创建流程</p>
     </Card.Content>
     <CreateFlowModal open={modalVisible} onOpen={openModal} onClose={closeModal}/>
   </Card>
