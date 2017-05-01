@@ -7,26 +7,6 @@ const FlowsPage = () => (
   <MainTopLayout>
     <CardLayout>
       <CreateFlowCard/>
-      <CreateFlowCard/>
-      <CreateFlowCard/>
-      <CreateFlowCard/>
-      <CreateFlowCard/>
-      <CreateFlowCard/>
-      <CreateFlowCard/>
-      <CreateFlowCard/>
-      <CreateFlowCard/>
-      <CreateFlowCard/>
-      <CreateFlowCard/>
-      <CreateFlowCard/>
-      <CreateFlowCard/>
-      <CreateFlowCard/>
-      <CreateFlowCard/>
-      <CreateFlowCard/>
-      <CreateFlowCard/>
-      <CreateFlowCard/>
-      <CreateFlowCard/>
-      <CreateFlowCard/>
-      <CreateFlowCard/>
     </CardLayout>
   </MainTopLayout>
 )

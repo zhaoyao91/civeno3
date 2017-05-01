@@ -6,8 +6,12 @@ import MainSideNavs from '../views/MainSideNavs'
 const MainTopLayout = ({children}) => (
   <MainLayout>
     <div style={{height: '100%', display: 'flex'}}>
-      <div style={{flexShrink: 0}}><MainSideNavs/></div>
-      <div style={{flexGrow: 1, overflow: 'auto'}}>{children}</div>
+      <div style={{flexShrink: 0}}>
+        <MainSideNavs/>
+      </div>
+      <div style={{flexGrow: 1, width: 0, overflow: 'auto'}}>
+        {children}
+      </div>
     </div>
   </MainLayout>
 )
