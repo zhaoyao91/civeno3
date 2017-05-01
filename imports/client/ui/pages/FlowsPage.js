@@ -8,19 +8,19 @@ import CreateFlowModal from '../views/CreateFlowModal'
 
 const FlowsPage = () => (
   <MainTopLayout>
-    <CardLayout>
+    <CardsLayout>
       <CreateFlowCard/>
-    </CardLayout>
+    </CardsLayout>
   </MainTopLayout>
 )
 
 export default FlowsPage
 
-const CardLayout = ({children}) => (
-  <div style={{padding: '1rem', height: '100%', overflow: 'auto'}}>
+const CardsLayout = ({children}) => (
+  <div style={{height: '100%', overflow: 'auto', padding: '2rem 0 0 2rem'}}>
     {
       flatten([children]).map((card, index) => (
-        <div key={index} style={{float: 'left', marginRight: '1rem', marginBottom: '1rem'}}>{card}</div>
+        <div key={index} style={{float: 'left', marginRight: '2rem', marginBottom: '2rem'}}>{card}</div>
       ))
     }
   </div>

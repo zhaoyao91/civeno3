@@ -9,7 +9,7 @@ import withMeteorData from '../hocs/with_meteor_data'
 
 const MainNavBar = () => (
   <Menu borderless>
-    <Menu.Item as={Link} to="/">
+    <Menu.Item as={Link} to="/" style={{fontSize: '1.5rem'}}>
       CIVENO
     </Menu.Item>
     <Menu.Menu position="right">
