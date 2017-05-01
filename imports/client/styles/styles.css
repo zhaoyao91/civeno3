@@ -1,0 +1,14 @@
+/* non-classified styles */
+
+/* render something in the center of the view port */
+.center-in-view-port {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}

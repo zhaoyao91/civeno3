@@ -7,5 +7,8 @@ export default function () {
   import 'react-s-alert/dist/s-alert-default.css'
   import 'react-s-alert/dist/s-alert-css-effects/slide.css'
   import '../styles/s_alert_patch.css'
+
+  // import common styles
+  import '../styles/styles.css'
 }
 

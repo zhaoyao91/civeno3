@@ -1,13 +1,13 @@
 import React from 'react'
 
 const LoadingComp = () => (
-  <div>
+  <div className="center-in-view-port">
     loading...
   </div>
 )
 
 const ErrorComp = () => (
-  <div>
+  <div className="center-in-view-port">
     error!
   </div>
 )

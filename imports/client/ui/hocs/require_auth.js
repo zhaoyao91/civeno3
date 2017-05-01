@@ -5,7 +5,7 @@ import { compose, branch, renderComponent } from 'recompose'
 
 import withMeteorData from './with_meteor_data'
 
-const LoggingIn = () => (<div>登录中，请稍后……</div>)
+const LoggingIn = () => (<div className="center-in-view-port">登录中，请稍后……</div>)
 
 const Redirection = () => (<Redirect to="/login"/>)
 
