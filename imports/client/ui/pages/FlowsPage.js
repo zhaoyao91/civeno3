@@ -17,7 +17,7 @@ const FlowsPage = () => (
 export default FlowsPage
 
 const CardLayout = ({children}) => (
-  <div style={{padding: '1em', overflow: 'auto'}}>
+  <div style={{padding: '1em', height: '100%', overflow: 'auto'}}>
     {
       flatten([children]).map((card, index) => (
         <div key={index} style={{float: 'left', marginRight: '1em', marginBottom: '1em'}}>{card}</div>
