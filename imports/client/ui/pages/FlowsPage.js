@@ -27,7 +27,13 @@ const CardsLayout = ({children}) => (
   <div style={{height: '100%', overflow: 'auto', padding: '2rem 0 0 2rem'}}>
     {
       children.map((card, index) => (
-        <div key={index} style={{float: 'left', marginRight: '2rem', marginBottom: '2rem'}}>{card}</div>
+        <div key={index} style={{
+          width: '228px',
+          height: '128px',
+          float: 'left',
+          marginRight: '2rem',
+          marginBottom: '2rem'
+        }}>{card}</div>
       ))
     }
   </div>
@@ -40,7 +46,7 @@ const CreateFlowCard = compose(
     closeModal: ({setModalVisible}) => () => setModalVisible(false),
   }),
 )(({modalVisible, openModal, closeModal}) => (
-  <Card style={{width: '300px', height: '170px'}} onClick={openModal}>
+  <Card style={{width: '100%', height: '100%'}} onClick={openModal}>
     <Card.Content style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
       <p style={{fontSize: '2rem', color: 'initial'}}>创建流程</p>
     </Card.Content>
@@ -57,7 +63,7 @@ const FlowCard = compose(
     onClick: ({history, flow}) => () => history.push(`/flow/${flow._id}`)
   })
 )(({flow, onClick}) => (
-  <Card style={{width: '300px', height: '170px'}} onClick={onClick}>
+  <Card style={{width: '100%', height: '100%'}} onClick={onClick}>
     <Card.Content>
       <Card.Header>{flow.name}</Card.Header>
       <Card.Description>{flow.description}</Card.Description>
