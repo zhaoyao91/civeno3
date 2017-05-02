@@ -1,10 +1,11 @@
 import React from 'react'
 import { Card } from 'semantic-ui-react'
-import { compose, withState, withHandlers, setPropTypes } from 'recompose'
+import { compose, withState, withHandlers, setPropTypes, setStatic } from 'recompose'
 import { Meteor } from 'meteor/meteor'
 import { flatten } from 'lodash/fp'
 import { withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
+import { SubsCache } from 'meteor/ccorcos:subs-cache'
 
 import withMeteorData from '../hocs/with_meteor_data'
 import Flows from '../../../common/collections/flows'
@@ -62,9 +63,10 @@ const FlowCard = compose(
 ))
 
 const FlowsView = compose(
+  setStatic('subsCache', new SubsCache()),
   withMeteorData(() => ({userId: Meteor.userId()})),
   withMeteorData(({userId}) => {
-    const sub = Meteor.subscribe('Flow.flowsOfOwner', userId)
+    const sub = FlowsView.subsCache.subscribe('Flow.flowsOfOwner', userId)
     return {
       dataReady: sub.ready()
     }
