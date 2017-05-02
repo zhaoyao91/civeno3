@@ -18,6 +18,9 @@ const ResetPasswordPage = lazyLoad(() => import('./pages/ResetPasswordPage'))
 const FlowsPage = requireAuth(lazyLoad(() => import('./pages/FlowsPage')))
 const FlowPage = requireAuth(lazyLoad(() => import('./pages/FlowPage')))
 const FlowDefinitionPage = requireAuth(lazyLoad(() => import('./pages/FlowDefinitionPage')))
+const FlowInstancesPage = requireAuth(lazyLoad(() => import('./pages/FlowInstancesPage')))
+const FlowDataPage = requireAuth(lazyLoad(() => import('./pages/FlowDataPage')))
+const FlowApplicationsPage = requireAuth(lazyLoad(() => import('./pages/FlowApplicationsPage')))
 
 // used to hold all global components and top level routes
 const App = ({history}) => (
@@ -32,6 +35,9 @@ const App = ({history}) => (
         <Route exact path="/flows" component={FlowsPage}/>
         <Route exact path="/flow/:flowId" component={FlowPage}/>
         <Route exact path="/flow/:flowId/definition" component={FlowDefinitionPage}/>
+        <Route exact path="/flow/:flowId/instances" component={FlowInstancesPage}/>
+        <Route exact path="/flow/:flowId/data" component={FlowDataPage}/>
+        <Route exact path="/flow/:flowId/applications" component={FlowApplicationsPage}/>
         <Route component={NotFoundPage}/>
       </Switch>
     </Router>
