@@ -24,3 +24,4 @@ check
 aldeed:collection2-core@2.0.0
 semantic:ui
 less
+peerlibrary:reactive-publish@=0.3.0
