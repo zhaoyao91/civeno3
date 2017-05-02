@@ -26,3 +26,4 @@ semantic:ui
 less
 peerlibrary:reactive-publish@=0.3.0
 ccorcos:subs-cache
+audit-argument-checks
