@@ -5,9 +5,9 @@ import UserCenterNavs from '../views/UserCenterNavs'
 import UserCenterProfileCard from '../views/UserCenterProfileCard'
 
 const UserCenterLayout = ({children}) => (
-  <Container style={{paddingTop: '2rem', display: 'flex'}}>
-    <div style={{marginRight: '2rem', minWidth: '25%', flexShrink: 0}}>
-      <div style={{marginBottom: '2rem'}}>
+  <Container style={{paddingTop: '1rem', display: 'flex'}}>
+    <div style={{marginRight: '1rem', minWidth: '25%', flexShrink: 0}}>
+      <div style={{marginBottom: '1rem'}}>
         <UserCenterProfileCard/>
       </div>
       <div>

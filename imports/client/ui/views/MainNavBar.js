@@ -5,7 +5,8 @@ import { Meteor } from 'meteor/meteor'
 import { prop } from 'lodash/fp'
 import { compose, withHandlers, withProps } from 'recompose'
 
-import withMeteorData from '../hocs/with_meteor_data'
+import withCurrentUserId from '../hocs/with_current_user_id'
+import withCurrentUser from '../hocs/with_current_user'
 
 const MainNavBar = () => (
   <Menu borderless>
@@ -21,10 +22,13 @@ const MainNavBar = () => (
 export default MainNavBar
 
 const AccountItem = compose(
-  withMeteorData(() => ({user: Meteor.user()}))
-)(({user}) => {
-  if (!user) return <LoginItem/>
-  else return <UserItem user={user}/>
+  withCurrentUserId
+)(({userId}) => {
+  if (userId) {
+    return <UserItem/>
+  } else {
+    return <LoginItem/>
+  }
 })
 
 const LoginItem = () => (
@@ -34,15 +38,19 @@ const LoginItem = () => (
 )
 
 const UserItem = compose(
+  withCurrentUser,
   withProps(({user}) => ({
-    email: prop('emails.0.address')(user)
+    name: prop('profile.name', user) || prop('emails.0.address', user)
   })),
   withHandlers({
     onClickLogout: (props) => () => Meteor.logout()
   })
-)(({email, onClickLogout}) => (
-  <Dropdown item text={email}>
+)(({name, onClickLogout}) => (
+  <Dropdown item text={name}>
     <Dropdown.Menu>
+      <Dropdown.Item as={Link} to="/user-center">
+        个人中心
+      </Dropdown.Item>
       <Dropdown.Item onClick={onClickLogout}>
         <span style={{color: 'red'}}>退出登录</span>
       </Dropdown.Item>
