@@ -9,13 +9,16 @@ import { SubsCache } from 'meteor/ccorcos:subs-cache'
 
 import withMeteorData from '../hocs/with_meteor_data'
 import Flows from '../../../common/collections/flows'
-import MainTopLayout from '../layouts/MainTopLayout'
 import CreateFlowModal from '../views/CreateFlowModal'
+import MainSideNavsLayout from '../layouts/MainSideNavsLayout'
+import MainNavBarLayout from '../layouts/MainNavBarLayout'
 
 const FlowsPage = () => (
-  <MainTopLayout>
-    <FlowsView/>
-  </MainTopLayout>
+  <MainNavBarLayout>
+    <MainSideNavsLayout>
+      <FlowsView/>
+    </MainSideNavsLayout>
+  </MainNavBarLayout>
 )
 
 export default FlowsPage
