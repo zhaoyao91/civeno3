@@ -1,14 +1,13 @@
 import { Meteor } from 'meteor/meteor'
 import { check, Match } from 'meteor/check'
 
-import PermissionService from '../../services/permission'
 import FlowService from '../../services/flow'
 
 Meteor.methods({
   /**
    * @param flow
    * @param flow.name
-   * @param flow.description
+   * @param [flow.description]
    *
    * @returns flowId
    */
@@ -18,7 +17,9 @@ Meteor.methods({
       description: Match.Optional(String),
     })
 
-    PermissionService.isAuthenticated(this.userId)
+    if (!this.userId) {
+      throw new Meteor.Error('Flow.createFlow.no-permission.not-authenticated', 'user must be logged in')
+    }
 
     return FlowService.createFlow({
       ...flow,

@@ -14,5 +14,13 @@ export default {
       ...flow,
       createdAt: new Date()
     })
+  },
+
+  /**
+   * @param owner
+   * @returns {Array} flows
+   */
+  getFlowsByOwner(owner) {
+    return Flows.find({owner: owner}).fetch()
   }
 }
