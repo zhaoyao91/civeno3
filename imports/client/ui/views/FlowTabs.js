@@ -3,6 +3,8 @@ import { Menu } from 'semantic-ui-react'
 import { compose, withProps } from 'recompose'
 import { withRouter, Link } from 'react-router-dom'
 
+import preload from '../hocs/preload'
+
 const navs = [
   {name: '流程定义', key: 'definition'},
   {name: '流程实例', key: 'instances'},
@@ -11,6 +13,12 @@ const navs = [
 ]
 
 const FlowTabs = compose(
+  preload(
+    () => import('../pages/FlowDefinitionPage'),
+    () => import('../pages/FlowInstancesPage'),
+    () => import('../pages/FlowDataPage'),
+    () => import('../pages/FlowApplicationsPage'),
+  ),
   withRouter,
   withProps(({match}) => ({
     flowId: match.params.flowId,
