@@ -16,6 +16,8 @@ const LoginPage = lazyLoad(() => import('./pages/LoginPage'))
 const ForgotPasswordPage = lazyLoad(() => import('./pages/ForgotPasswordPage'))
 const ResetPasswordPage = lazyLoad(() => import('./pages/ResetPasswordPage'))
 const FlowsPage = requireAuth(lazyLoad(() => import('./pages/FlowsPage')))
+const FlowPage = requireAuth(lazyLoad(() => import('./pages/FlowPage')))
+const FlowDefinitionPage = requireAuth(lazyLoad(() => import('./pages/FlowDefinitionPage')))
 
 // used to hold all global components and top level routes
 const App = ({history}) => (
@@ -28,6 +30,8 @@ const App = ({history}) => (
         <Route exact path="/forgot-password" component={ForgotPasswordPage}/>
         <Route exact path="/reset-password/:token" component={ResetPasswordPage}/>
         <Route exact path="/flows" component={FlowsPage}/>
+        <Route exact path="/flow/:flowId" component={FlowPage}/>
+        <Route exact path="/flow/:flowId/definition" component={FlowDefinitionPage}/>
         <Route component={NotFoundPage}/>
       </Switch>
     </Router>

@@ -1,8 +1,10 @@
 import React from 'react'
 import { Card } from 'semantic-ui-react'
-import { compose, withState, withHandlers } from 'recompose'
+import { compose, withState, withHandlers, setPropTypes } from 'recompose'
 import { Meteor } from 'meteor/meteor'
 import { flatten } from 'lodash/fp'
+import { withRouter } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
 import withMeteorData from '../hocs/with_meteor_data'
 import Flows from '../../../common/collections/flows'
@@ -43,9 +45,15 @@ const CreateFlowCard = compose(
 ))
 
 const FlowCard = compose(
-
-)(({flow}) => (
-  <Card style={{width: '300px', height: '170px'}}>
+  setPropTypes({
+    flow: PropTypes.object
+  }),
+  withRouter,
+  withHandlers({
+    onClick: ({history, flow}) => () => history.push(`/flow/${flow._id}`)
+  })
+)(({flow, onClick}) => (
+  <Card style={{width: '300px', height: '170px'}} onClick={onClick}>
     <Card.Content>
       <Card.Header>{flow.name}</Card.Header>
       <Card.Description>{flow.description}</Card.Description>
