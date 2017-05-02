@@ -46,7 +46,7 @@ const UserItem = compose(
     onClickLogout: (props) => () => Meteor.logout()
   })
 )(({name, onClickLogout}) => (
-  <Dropdown item text={name}>
+  <Dropdown item text={name} floating>
     <Dropdown.Menu>
       <Dropdown.Item as={Link} to="/user-center">
         个人中心
