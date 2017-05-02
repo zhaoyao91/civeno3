@@ -8,7 +8,7 @@ const navs = [
   {name: '工作台', path: '/workspace'},
 ]
 
-export default compose(
+const MainSideNavs = compose(
   withRouter,
 )(({match}) => (
   <Menu vertical style={{width: 'auto', height: '100%'}}>
@@ -22,3 +22,5 @@ export default compose(
     }
   </Menu>
 ))
+
+export default MainSideNavs

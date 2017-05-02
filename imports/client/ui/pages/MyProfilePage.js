@@ -1,13 +1,13 @@
 import React from 'react'
 
 import MainNavBarLayout from '../layouts/MainNavBarLayout'
-import MyPageLayout from '../layouts/MyPageLayout'
+import UserCenterLayout from '../layouts/UserCenterLayout'
 
 const MyProfilePage = () => (
   <MainNavBarLayout>
-    <MyPageLayout>
+    <UserCenterLayout>
       my profile
-    </MyPageLayout>
+    </UserCenterLayout>
   </MainNavBarLayout>
 )
 
