@@ -6,23 +6,22 @@ import {
 } from 'react-router-dom'
 import Alert from 'react-s-alert'
 
-import lazyLoad from './lib/lazy_load'
 import requireAuth from './hocs/require_auth'
 
-const NotFoundPage = lazyLoad(() => import('./pages/NotFoundPage'))
-const IndexPage = lazyLoad(() => import('./pages/IndexPage'))
-const SignupPage = lazyLoad(() => import('./pages/SignupPage'))
-const LoginPage = lazyLoad(() => import('./pages/LoginPage'))
-const ForgotPasswordPage = lazyLoad(() => import('./pages/ForgotPasswordPage'))
-const ResetPasswordPage = lazyLoad(() => import('./pages/ResetPasswordPage'))
-const FlowsPage = requireAuth(lazyLoad(() => import('./pages/FlowsPage')))
-const FlowPage = requireAuth(lazyLoad(() => import('./pages/FlowPage')))
-const FlowDefinitionPage = requireAuth(lazyLoad(() => import('./pages/FlowDefinitionPage')))
-const FlowInstancesPage = requireAuth(lazyLoad(() => import('./pages/FlowInstancesPage')))
-const FlowDataPage = requireAuth(lazyLoad(() => import('./pages/FlowDataPage')))
-const FlowApplicationsPage = requireAuth(lazyLoad(() => import('./pages/FlowApplicationsPage')))
-const UserCenterPage = requireAuth(lazyLoad(() => import('./pages/UserCenterPage')))
-const MyProfilePage = requireAuth(lazyLoad(() => import('./pages/MyProfilePage')))
+const NotFoundPage = require('./pages/NotFoundPage').default
+const IndexPage = require('./pages/IndexPage').default
+const SignupPage = require('./pages/SignupPage').default
+const LoginPage = require('./pages/LoginPage').default
+const ForgotPasswordPage = require('./pages/ForgotPasswordPage').default
+const ResetPasswordPage = require('./pages/ResetPasswordPage').default
+const FlowsPage = requireAuth(require('./pages/FlowsPage').default)
+const FlowPage = requireAuth(require('./pages/FlowPage').default)
+const FlowDefinitionPage = requireAuth(require('./pages/FlowDefinitionPage').default)
+const FlowInstancesPage = requireAuth(require('./pages/FlowInstancesPage').default)
+const FlowDataPage = requireAuth(require('./pages/FlowDataPage').default)
+const FlowApplicationsPage = requireAuth(require('./pages/FlowApplicationsPage').default)
+const UserCenterPage = requireAuth(require('./pages/UserCenterPage').default)
+const MyProfilePage = requireAuth(require('./pages/MyProfilePage').default)
 
 // used to hold all global components and top level routes
 const App = ({history}) => (
