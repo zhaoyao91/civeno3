@@ -8,6 +8,7 @@ import Alert from 'react-s-alert'
 
 import requireAuth from './hocs/require_auth'
 
+const TestPage = require('./pages/TestPage').default
 const NotFoundPage = require('./pages/NotFoundPage').default
 const IndexPage = require('./pages/IndexPage').default
 const SignupPage = require('./pages/SignupPage').default
@@ -28,6 +29,7 @@ const App = ({history}) => (
   <div>
     <Router history={history}>
       <Switch>
+        <Route exact path="/test" component={TestPage}/>
         <Route exact path="/" component={IndexPage}/>
         <Route exact path="/signup" component={SignupPage}/>
         <Route exact path="/login" component={LoginPage}/>
