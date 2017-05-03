@@ -2,13 +2,14 @@ import React from 'react'
 import { Card } from 'semantic-ui-react'
 import { compose, withState, withHandlers, setPropTypes, setStatic } from 'recompose'
 import { Meteor } from 'meteor/meteor'
-import { flatten } from 'lodash/fp'
+import { flatten, prop } from 'lodash/fp'
 import { withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { SubsCache } from 'meteor/ccorcos:subs-cache'
 
 import withMeteorData from '../hocs/with_meteor_data'
 import Flows from '../../collections/flows'
+import FlowUserRelations from '../../collections/flow_user_relations'
 import CreateFlowModal from '../views/CreateFlowModal'
 import MainSideNavsLayout from '../layouts/MainSideNavsLayout'
 import MainNavBarLayout from '../layouts/MainNavBarLayout'
@@ -56,17 +57,18 @@ const CreateFlowCard = compose(
 
 const FlowCard = compose(
   setPropTypes({
-    flow: PropTypes.object
+    flowId: PropTypes.string
   }),
+  withMeteorData(({flowId}) => ({flow: Flows.findOne(flowId)})),
   withRouter,
   withHandlers({
-    onClick: ({history, flow}) => () => history.push(`/flow/${flow._id}`)
+    onClick: ({history, flowId}) => () => history.push(`/flow/${flowId}`)
   })
 )(({flow, onClick}) => (
   <Card style={{width: '100%', height: '100%'}} onClick={onClick}>
     <Card.Content>
-      <Card.Header>{flow.name}</Card.Header>
-      <Card.Description>{flow.description}</Card.Description>
+      <Card.Header>{prop('name', flow)}</Card.Header>
+      <Card.Description>{prop('description', flow)}</Card.Description>
     </Card.Content>
   </Card>
 ))
@@ -75,29 +77,31 @@ const FlowsView = compose(
   setStatic('subsCache', new SubsCache()),
   withMeteorData(() => ({userId: Meteor.userId()})),
   withMeteorData(({userId}) => {
-    const sub = FlowsView.subsCache.subscribe('Flow.flowsOfOwner', userId)
-    return {
-      dataReady: sub.ready()
+    if (userId) {
+      const sub = FlowsView.subsCache.subscribe('Flow.flowsOfOwner', userId)
+      return {
+        dataReady: sub.ready()
+      }
+    } else {
+      return {dataReady: false}
     }
   }),
   withMeteorData(({userId, dataReady}) => {
     if (userId && dataReady) {
       return {
-        flows: Flows.find({owner: userId}).fetch()
+        flowIds: FlowUserRelations.find({type: 'owner', userId: userId}).map(prop('flowId'))
       }
     } else {
-      return {
-        flows: []
-      }
+      return {flowIds: []}
     }
   })
-)(({flows}) => (
+)(({flowIds}) => (
   <CardsLayout>
     {
       flatten([
         <CreateFlowCard key="0"/>,
-        flows.map(flow => (
-          <FlowCard key={flow._id} flow={flow}/>
+        flowIds.map(flowId => (
+          <FlowCard key={flowId} flowId={flowId}/>
         ))
       ])
     }

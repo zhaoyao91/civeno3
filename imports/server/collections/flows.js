@@ -13,11 +13,6 @@ Flows.attachSchema(new SimpleSchema({
     optional: true
   },
 
-  // userId
-  owner: {
-    type: String
-  },
-
   createdAt: {
     type: Date
   }

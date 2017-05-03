@@ -28,3 +28,4 @@ peerlibrary:reactive-publish
 ccorcos:subs-cache
 audit-argument-checks
 random
+aldeed:schema-index

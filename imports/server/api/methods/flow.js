@@ -22,7 +22,7 @@ Meteor.methods({
     }
 
     return FlowService.createFlow({
-      ...flow,
+      flow: flow,
       owner: this.userId,
     })
   }
