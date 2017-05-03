@@ -1,4 +1,4 @@
-import Users from '../../common/collections/users'
+import Users from '../collections/users'
 
 export default {
   /**

@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 import { SubsCache } from 'meteor/ccorcos:subs-cache'
 
 import withMeteorData from '../hocs/with_meteor_data'
-import Flows from '../../../common/collections/flows'
+import Flows from '../../collections/flows'
 import CreateFlowModal from '../views/CreateFlowModal'
 import MainSideNavsLayout from '../layouts/MainSideNavsLayout'
 import MainNavBarLayout from '../layouts/MainNavBarLayout'

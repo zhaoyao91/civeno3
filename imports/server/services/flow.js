@@ -1,4 +1,4 @@
-import Flows from '../../common/collections/flows'
+import Flows from '../collections/flows'
 
 export default {
   /**

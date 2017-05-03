@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { check } from 'meteor/check'
 
-import Flows from '../../../common/collections/flows'
+import Flows from '../../collections/flows'
 
 Meteor.publish('Flow.flowsOfOwner', function (owner) {
   check(owner, String)

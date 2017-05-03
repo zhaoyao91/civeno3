@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { check } from 'meteor/check'
 
-import Users from '../../../common/collections/users'
+import Users from '../../collections/users'
 
 Meteor.publish('User.userProfile', function (userId) {
   check(userId, String)
