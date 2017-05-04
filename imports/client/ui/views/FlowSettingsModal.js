@@ -1,12 +1,14 @@
 import React from 'react'
-import { Modal, Loader, Form } from 'semantic-ui-react'
-import { setPropTypes, compose, branch, renderComponent, renderNothing } from 'recompose'
-import PropTypes from 'prop-types'
+import { Modal, Loader, TextArea } from 'semantic-ui-react'
+import { setPropTypes, compose, branch, renderComponent, renderNothing, withHandlers } from 'recompose'
 import { Meteor } from 'meteor/meteor'
-import { propOr } from 'lodash/fp'
+import { prop } from 'lodash/fp'
+import PropTypes from 'prop-types'
 
+import withToggleState from '../hocs/with_toggle_state'
 import withMeteorData from '../hocs/with_meteor_data'
 import Flows from '../../collections/flows'
+import SavableInput from '../components/SavableInput'
 
 const FlowSettingsModal = compose(
   setPropTypes({
@@ -20,14 +22,14 @@ const FlowSettingsModal = compose(
   <Modal size="small" open={open} trigger={trigger} onOpen={onOpen} onClose={onClose} closeIcon='close'>
     <Modal.Header content="流程设置"/>
     <Modal.Content>
-      <FlowSettingsForm flowId={flowId}/>
+      <FlowSettings flowId={flowId}/>
     </Modal.Content>
   </Modal>
 ))
 
 export default FlowSettingsModal
 
-const FlowSettingsForm = compose(
+const FlowSettings = compose(
   setPropTypes({
     flowId: PropTypes.string,
   }),
@@ -37,8 +39,27 @@ const FlowSettingsForm = compose(
   branch(({flow}) => !flow, renderNothing)
 )
 (({dataReady, flow}) => (
-  <Form>
-    <Form.Input label="流程名称" value={propOr('', 'name', flow)}/>
-    <Form.TextArea autoHeight label="流程简介" value={propOr('', 'description', flow)}/>
-  </Form>
+  <div>
+    <FlowNameInput flowId={prop('_id', flow)} flowName={prop('name', flow)}/>
+  </div>
+))
+
+const FlowNameInput = compose(
+  setPropTypes({
+    flowId: PropTypes.string,
+    flowName: PropTypes.string,
+  }),
+  withToggleState('saving', 'startSaving', 'finishSaving', false),
+  withHandlers({
+    save: ({flowId, startSaving, finishSaving}) => name => {
+      console.log('new flow name: ', name)
+      startSaving()
+      setTimeout(() => {
+        console.log('finished')
+        finishSaving()
+      }, 1000)
+    }
+  })
+)(({flowName, save, saving}) => (
+  <SavableInput label="流程名称" value={flowName} save={save} saving={saving}/>
 ))
