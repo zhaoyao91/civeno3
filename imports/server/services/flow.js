@@ -2,6 +2,8 @@ import Flows from '../collections/flows'
 import FlowUserRelations from '../collections/flow_user_relations'
 
 export default {
+  // update
+
   /**
    * @param flow
    * @param flow.name
@@ -29,5 +31,21 @@ export default {
    */
   updateFlowName(flowId, name) {
     Flows.update({_id: flowId}, {$set: {name: name}})
+  },
+
+  // check
+
+  /**
+   * check if the user is the owner of the flow
+   * @param userId
+   * @param flowId
+   * @returns {Boolean} result
+   */
+  userIsFlowOwner(userId, flowId) {
+    return FlowUserRelations.find({
+        type: 'owner',
+        userId: userId,
+        flowId: flowId
+      }, {fields: {_id: 1}, limit: 1}).count() > 0
   }
 }

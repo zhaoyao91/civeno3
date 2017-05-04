@@ -8,8 +8,6 @@ Meteor.publish('User.userProfile', function (userId) {
 
   if (!this.userId) {
     return this.ready()
-  } else if (this.userId !== userId) {
-    return this.ready()
   }
 
   return Users.find({_id: userId}, {fields: {profile: 1}})
