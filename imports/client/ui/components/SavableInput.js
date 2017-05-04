@@ -30,7 +30,9 @@ const SavableInput = compose(
   }),
   withState('value', 'setValue', ({actualValue}) => actualValue),
   withHandlers({
-    onValueChange: ({setValue}) => e => setValue(e.target.value),
+    onValueChange: ({setValue, loading}) => e => {
+      if (!loading) setValue(e.target.value)
+    },
     onSubmit: ({save, value, setValue}) => e => {
       e.preventDefault()
       save(value, setValue)
@@ -41,19 +43,21 @@ const SavableInput = compose(
   withProps(({value, actualValue}) => ({
     valueDirty: value !== actualValue
   })),
-  withProps(({valueDirty, focused}) => ({
+  withProps(({valueDirty, focused, loading}) => ({
     displayActions: valueDirty || focused,
-    disableActions: !valueDirty,
+    disableActions: !valueDirty || loading,
+    disableControl: loading,
   }))
-)(({required, label, Control, value, onValueChange, onSubmit, onReset, loading, style, displayActions, disableActions, focus, blur, controlProps}) => (
-  <Form style={style} loading={loading} onSubmit={onSubmit}>
+)(({required, label, Control, value, onValueChange, onSubmit, onReset, loading, style, displayActions, disableActions, focus, blur, controlProps, disableControl}) => (
+  <Form style={style} onSubmit={onSubmit}>
     <Form.Field required={required}>
       <label>{label}</label>
-      <Control {...controlProps} value={value} onChange={onValueChange} onFocus={focus} onBlur={blur}/>
+      <Control disabled={disableControl} value={value} onChange={onValueChange} onFocus={focus}
+               onBlur={blur} {...controlProps}/>
     </Form.Field>
     {
       displayActions && <div>
-        <Button primary type="submit" disabled={disableActions}>保存</Button>
+        <Button primary type="submit" loading={loading} disabled={disableActions}>保存</Button>
         <Button onClick={onReset} type="button" disabled={disableActions}>重置</Button>
       </div>
     }
