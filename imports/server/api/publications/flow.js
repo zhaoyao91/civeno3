@@ -8,18 +8,12 @@ import FlowUserRelations from '../../collections/flow_user_relations'
 Meteor.publish('Flow.flowsOfOwner', function (owner) {
   check(owner, String)
 
-  if (!this.userId) {
-    return this.ready()
-  } else if (this.userId !== owner) {
-    return this.ready()
-  }
-
   this.autorun(function () {
-    return FlowUserRelations.find({type: 'owner', userId: owner})
-  })
-
-  this.autorun(function () {
-    const flowIds = FlowUserRelations.find({type: 'owner', userId: owner}, {fields: {flowId: 1}}).map(prop('flowId'))
-    return Flows.find({_id: {$in: flowIds}})
+    const ownerRelationsCursor = FlowUserRelations.find({type: 'owner', userId: owner})
+    const flowIds = ownerRelationsCursor.map(prop('flowId'))
+    this.autorun(function () {
+      const flowsCursor = Flows.find({_id: {$in: flowIds}})
+      return [ownerRelationsCursor, flowsCursor]
+    })
   })
 })
