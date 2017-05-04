@@ -5,11 +5,13 @@ import withMeteorData from './with_meteor_data'
 
 const subsCache = new SubsCache()
 
-export default withMeteorData(() => {
-  if (Meteor.userId()) {
-    subsCache.subscribe('User.userProfile', Meteor.userId())
-  }
-  return {
-    user: Meteor.user()
-  }
-})
+export default function (propName) {
+  return withMeteorData(() => {
+    if (Meteor.userId()) {
+      subsCache.subscribe('User.userProfile', Meteor.userId())
+    }
+    return {
+      [propName]: Meteor.user()
+    }
+  })
+}

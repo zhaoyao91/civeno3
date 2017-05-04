@@ -7,6 +7,7 @@ import { compose, withHandlers, withProps } from 'recompose'
 
 import withCurrentUserId from '../hocs/with_current_user_id'
 import withCurrentUser from '../hocs/with_current_user'
+import UserAvatar from '../views/UserAvatar'
 
 const MainNavBar = () => (
   <Menu borderless>
@@ -22,7 +23,7 @@ const MainNavBar = () => (
 export default MainNavBar
 
 const AccountItem = compose(
-  withCurrentUserId
+  withCurrentUserId('userId')
 )(({userId}) => {
   if (userId) {
     return <UserItem/>
@@ -38,15 +39,13 @@ const LoginItem = () => (
 )
 
 const UserItem = compose(
-  withCurrentUser,
-  withProps(({user}) => ({
-    name: prop('profile.name', user) || prop('emails.0.address', user)
-  })),
+  withCurrentUser('user'),
   withHandlers({
     onClickLogout: (props) => () => Meteor.logout()
   })
-)(({name, onClickLogout}) => (
-  <Dropdown item text={name} floating>
+)(({user, onClickLogout}) => (
+  <Dropdown item floating style={{paddingTop: '0.5rem', paddingBottom: '0.5rem'}}
+            trigger={<UserAvatar user={user} size={40}/>}>
     <Dropdown.Menu>
       <Dropdown.Item as={Link} to="/user-center">
         个人中心

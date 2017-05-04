@@ -9,12 +9,14 @@ import Alert from 'react-s-alert'
 import withCurrentUser from '../hocs/with_current_user'
 import MainNavBarLayout from '../layouts/MainNavBarLayout'
 import UserCenterLayout from '../layouts/UserCenterLayout'
+import UserAvatar from '../views/UserAvatar'
 
 const MyProfilePage = () => (
   <MainNavBarLayout>
     <UserCenterLayout>
       <Segment style={{margin: 0}}>
         <Header>个人信息</Header>
+        <MyAvatar/>
         <ProfileForm/>
       </Segment>
     </UserCenterLayout>
@@ -23,8 +25,19 @@ const MyProfilePage = () => (
 
 export default MyProfilePage
 
+const MyAvatar = compose(
+  withCurrentUser('user')
+)(({user}) => (
+  <Form>
+    <Form.Field>
+      <label>头像</label>
+      <UserAvatar size={150} user={user}/>
+    </Form.Field>
+  </Form>
+))
+
 const ProfileForm = compose(
-  withCurrentUser,
+  withCurrentUser('user'),
   withProps(({user}) => ({profile: prop('profile', user)})),
   withState('name', 'setName', ({profile}) => prop('name', profile)),
   withProps(({profile, name}) => ({
