@@ -6,7 +6,7 @@ import UserCenterProfileCard from '../views/UserCenterProfileCard'
 
 const UserCenterLayout = ({children}) => (
   <Container style={{paddingTop: '1rem', display: 'flex'}}>
-    <div style={{marginRight: '1rem', width: '25%', flexShrink: 0}}>
+    <div style={{marginRight: '1rem', width: '30%', flexShrink: 0}}>
       <div style={{marginBottom: '1rem'}}>
         <UserCenterProfileCard/>
       </div>

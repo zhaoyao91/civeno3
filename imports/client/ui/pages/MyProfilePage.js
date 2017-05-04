@@ -16,7 +16,7 @@ const MyProfilePage = () => (
     <UserCenterLayout>
       <Segment style={{margin: 0}}>
         <Header>个人信息</Header>
-        <MyAvatar/>
+        <div style={{marginBottom: '1rem'}}><MyAvatar/></div>
         <ProfileForm/>
       </Segment>
     </UserCenterLayout>

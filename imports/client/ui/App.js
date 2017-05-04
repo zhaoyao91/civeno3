@@ -23,6 +23,7 @@ const FlowDataPage = requireAuth(require('./pages/FlowDataPage').default)
 const FlowApplicationsPage = requireAuth(require('./pages/FlowApplicationsPage').default)
 const UserCenterPage = requireAuth(require('./pages/UserCenterPage').default)
 const MyProfilePage = requireAuth(require('./pages/MyProfilePage').default)
+const MyAccountPage = requireAuth(require('./pages/MyAccountPage').default)
 
 // used to hold all global components and top level routes
 const App = ({history}) => (
@@ -37,6 +38,7 @@ const App = ({history}) => (
         <Route exact path="/reset-password/:token" component={ResetPasswordPage}/>
         <Route exact path="/user-center" component={UserCenterPage}/>
         <Route exact path="/my/profile" component={MyProfilePage}/>
+        <Route exact path="/my/account" component={MyAccountPage}/>
         <Route exact path="/flows" component={FlowsPage}/>
         <Route exact path="/flow/:flowId" component={FlowPage}/>
         <Route exact path="/flow/:flowId/definition" component={FlowDefinitionPage}/>
