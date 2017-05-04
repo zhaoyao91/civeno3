@@ -1,10 +1,14 @@
 import React from 'react'
-import { Modal, Button, Form } from 'semantic-ui-react'
+import { Form } from 'semantic-ui-react'
 import { setPropTypes, compose, withState, withHandlers, lifecycle } from 'recompose'
 import { assoc } from 'lodash/fp'
 import PropTypes from 'prop-types'
 import Alert from 'react-s-alert'
 import { Meteor } from 'meteor/meteor'
+
+import FormModal from './FormModal'
+import withToggleState from '../hocs/with_toggle_state'
+import onToggle from '../hocs/on_toggle'
 
 const emptyFlow = {name: '', description: ''}
 
@@ -21,23 +25,17 @@ export default compose(
     onDescriptionChange: ({setFlow}) => e => setFlow(assoc('description', e.target.value)),
     resetFlow: ({setFlow}) => () => setFlow(emptyFlow)
   }),
-  lifecycle({
-    componentWillReceiveProps(nextProps) {
-      if (this.props.open !== nextProps.open) {
-        this.props.resetFlow()
-      }
-    }
-  }),
-  withState('submitting', 'setSubmitting', false),
+  onToggle('open', ({resetFlow}) => resetFlow()),
+  withToggleState('submitting', 'startSubmit', 'finishSubmit', false),
   withHandlers({
-    onCreateFlow: ({flow, setSubmitting, onClose}) => () => {
+    submit: ({flow, startSubmit, finishSubmit, onClose}) => () => {
       if (!flow.name) {
         return Alert.error('请如输入流程名称')
       }
 
-      setSubmitting(true)
+      startSubmit()
       Meteor.call('Flow.createFlow', flow, (err, flowId) => {
-        setSubmitting(false)
+        finishSubmit()
         if (err) {
           console.error(err)
           Alert.error('流程创建失败')
@@ -48,24 +46,10 @@ export default compose(
       })
     }
   }),
-  withHandlers({
-    onSubmit: ({onCreateFlow}) => e => {
-      e.preventDefault()
-      onCreateFlow()
-    }
-  })
-)(({trigger, open, onOpen, onClose, flow, onNameChange, onDescriptionChange, onSubmit, onCreateFlow, submitting}) => (
-  <Modal size="small" open={open} trigger={trigger} onOpen={onOpen} onClose={onClose} closeIcon='close'>
-    <Modal.Header content='创建流程'/>
-    <Modal.Content>
-      <Form loading={submitting} onSubmit={onSubmit}>
-        <Form.Input required label="流程名称" value={flow.name} onChange={onNameChange}/>
-        <Form.TextArea autoHeight label="流程描述" value={flow.description} onChange={onDescriptionChange}/>
-      </Form>
-    </Modal.Content>
-    <Modal.Actions>
-      <Button onClick={onClose}>返回</Button>
-      <Button primary onClick={onCreateFlow}>创建</Button>
-    </Modal.Actions>
-  </Modal>
+)(({trigger, open, onOpen, onClose, flow, onNameChange, onDescriptionChange, submit, submitting}) => (
+  <FormModal open={open} trigger={trigger} onOpen={onOpen} onClose={onClose} submit={submit} submitting={submitting}
+             header="创建流程">
+    <Form.Input autoFocus required label="流程名称" value={flow.name} onChange={onNameChange}/>
+    <Form.TextArea autoHeight label="流程描述" value={flow.description} onChange={onDescriptionChange}/>
+  </FormModal>
 ))

@@ -1,10 +1,13 @@
 import React from 'react'
-import { Modal, Button, Form } from 'semantic-ui-react'
+import {  Form } from 'semantic-ui-react'
 import { setPropTypes, compose, withState, withHandlers, lifecycle } from 'recompose'
-import { assoc } from 'lodash/fp'
 import PropTypes from 'prop-types'
 import Alert from 'react-s-alert'
 import { Accounts } from 'meteor/accounts-base'
+
+import FormModal from './FormModal'
+import withToggleState from '../hocs/with_toggle_state'
+import onToggle from '../hocs/on_toggle'
 
 export default compose(
   setPropTypes({
@@ -23,25 +26,19 @@ export default compose(
       setNewPassword('')
     }
   }),
-  lifecycle({
-    componentWillReceiveProps(nextProps) {
-      if (this.props.open !== nextProps.open) {
-        this.props.resetForm()
-      }
-    }
-  }),
-  withState('submitting', 'setSubmitting', false),
+  onToggle('open', ({resetForm}) => resetForm()),
+  withToggleState('submitting', 'startSubmit', 'finishSubmit', false),
   withHandlers({
-    onUpdatePassword: ({oldPassword, newPassword, setSubmitting, onClose}) => () => {
+    submit: ({oldPassword, newPassword, startSubmit, finishSubmit, onClose}) => () => {
       if (!oldPassword) {
         return Alert.error('请如输入旧密码')
       } else if (!newPassword) {
         return Alert.error('请输入新密码')
       }
 
-      setSubmitting(true)
+      startSubmit()
       Accounts.changePassword(oldPassword, newPassword, (err) => {
-        setSubmitting(false)
+        finishSubmit()
         if (err) {
           console.error(err)
           if (err.reason === 'Incorrect password') {
@@ -56,25 +53,11 @@ export default compose(
       })
     }
   }),
-  withHandlers({
-    onSubmit: ({onUpdatePassword}) => e => {
-      e.preventDefault()
-      onUpdatePassword()
-    }
-  })
-)(({trigger, open, onOpen, onClose, oldPassword, onOldPasswordChange, newPassword, onNewPasswordChange, onSubmit, onUpdatePassword, submitting}) => (
-  <Modal size="small" open={open} trigger={trigger} onOpen={onOpen} onClose={onClose} closeIcon='close'>
-    <Modal.Header content='修改密码'/>
-    <Modal.Content>
-      <Form loading={submitting} onSubmit={onSubmit}>
-        <Form.Input type="password" required label="旧密码" value={oldPassword} onChange={onOldPasswordChange}/>
-        <Form.Input type="password" required label="新密码" value={newPassword} onChange={onNewPasswordChange}/>
-        <Button style={{display: 'none'}}>提交</Button>
-      </Form>
-    </Modal.Content>
-    <Modal.Actions>
-      <Button onClick={onClose}>返回</Button>
-      <Button primary onClick={onUpdatePassword}>确认</Button>
-    </Modal.Actions>
-  </Modal>
+)
+(({trigger, open, onOpen, onClose, oldPassword, onOldPasswordChange, newPassword, onNewPasswordChange, submit, submitting}) => (
+  <FormModal open={open} trigger={trigger} onOpen={onOpen} onClose={onClose} header="修改密码" submitting={submitting}
+             submit={submit}>
+    <Form.Input autoFocus type="password" required label="旧密码" value={oldPassword} onChange={onOldPasswordChange}/>
+    <Form.Input type="password" required label="新密码" value={newPassword} onChange={onNewPasswordChange}/>
+  </FormModal>
 ))

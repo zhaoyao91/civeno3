@@ -1,15 +1,14 @@
 import React from 'react'
-import { Segment, Header, Form, Button, Modal } from 'semantic-ui-react'
+import { Segment, Header, Form, Button } from 'semantic-ui-react'
 import { compose, withState, withProps, withHandlers } from 'recompose'
-import { Meteor } from 'meteor/meteor'
 import { SubsCache } from 'meteor/ccorcos:subs-cache'
 import { prop, trim } from 'lodash/fp'
-import Alert from 'react-s-alert'
 
 import withCurrentUser from '../hocs/with_current_user'
 import MainNavBarLayout from '../layouts/MainNavBarLayout'
 import UserCenterLayout from '../layouts/UserCenterLayout'
 import ChangePasswordModal from '../views/ChangePasswordModal'
+import withToggleState from '../hocs/with_toggle_state'
 
 const MyAccountPage = () => (
   <MainNavBarLayout>
@@ -47,11 +46,7 @@ const MyPassword = compose()(() => (
 ))
 
 const ChangePasswordButton = compose(
-  withState('modalVisible', 'setModalVisible', false),
-  withHandlers({
-    openModal: ({setModalVisible}) => () => setModalVisible(true),
-    closeModal: ({setModalVisible}) => () => setModalVisible(false),
-  })
+  withToggleState('modalVisible', 'openModal', 'closeModal', false),
 )(({modalVisible, openModal, closeModal}) => (
   <ChangePasswordModal open={modalVisible} onOpen={openModal} onClose={closeModal}
                        trigger={<Button primary type="button">修改密码</Button>}/>

@@ -13,6 +13,7 @@ import FlowUserRelations from '../../collections/flow_user_relations'
 import CreateFlowModal from '../views/CreateFlowModal'
 import MainSideNavsLayout from '../layouts/MainSideNavsLayout'
 import MainNavBarLayout from '../layouts/MainNavBarLayout'
+import withToggleState from '../hocs/with_toggle_state'
 
 const FlowsPage = () => (
   <MainNavBarLayout>
@@ -41,11 +42,7 @@ const CardsLayout = ({children}) => (
 )
 
 const CreateFlowCard = compose(
-  withState('modalVisible', 'setModalVisible', false),
-  withHandlers({
-    openModal: ({setModalVisible}) => () => setModalVisible(true),
-    closeModal: ({setModalVisible}) => () => setModalVisible(false),
-  }),
+  withToggleState('modalVisible', 'openModal', 'closeModal', false),
 )(({modalVisible, openModal, closeModal}) => (
   <Card style={{width: '100%', height: '100%'}} onClick={openModal}>
     <Card.Content style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
