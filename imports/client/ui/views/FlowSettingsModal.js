@@ -1,9 +1,10 @@
 import React from 'react'
-import { Modal, Loader, TextArea } from 'semantic-ui-react'
+import { Modal, Loader } from 'semantic-ui-react'
 import { setPropTypes, compose, branch, renderComponent, renderNothing, withHandlers } from 'recompose'
 import { Meteor } from 'meteor/meteor'
 import { prop } from 'lodash/fp'
 import PropTypes from 'prop-types'
+import Alert from 'react-s-alert'
 
 import withToggleState from '../hocs/with_toggle_state'
 import withMeteorData from '../hocs/with_meteor_data'
@@ -52,14 +53,22 @@ const FlowNameInput = compose(
   withToggleState('saving', 'startSaving', 'finishSaving', false),
   withHandlers({
     save: ({flowId, startSaving, finishSaving}) => name => {
-      console.log('new flow name: ', name)
+      if (!name) {
+        return Alert.error('流程名称不能为空')
+      }
+
       startSaving()
-      setTimeout(() => {
-        console.log('finished')
+      Meteor.call('Flow.updateFlowName', flowId, name, (err) => {
         finishSaving()
-      }, 1000)
+        if (err) {
+          console.error(err)
+          Alert.error('流程名称更新失败')
+        } else {
+          Alert.success('流程名称更新成功')
+        }
+      })
     }
   })
 )(({flowName, save, saving}) => (
-  <SavableInput label="流程名称" value={flowName} save={save} saving={saving}/>
+  <SavableInput required label="流程名称" value={flowName} save={save} saving={saving}/>
 ))

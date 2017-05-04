@@ -18,6 +18,7 @@ const SavableInput = compose(
       PropTypes.element,
     ]),
     controlProps: PropTypes.object,
+    required: PropTypes.bool,
   }),
   defaultProps({
     as: Input
@@ -44,9 +45,9 @@ const SavableInput = compose(
     displayActions: valueDirty || focused,
     disableActions: !valueDirty,
   }))
-)(({label, Control, value, onValueChange, onSubmit, onReset, loading, style, displayActions, disableActions, focus, blur, controlProps}) => (
+)(({required, label, Control, value, onValueChange, onSubmit, onReset, loading, style, displayActions, disableActions, focus, blur, controlProps}) => (
   <Form style={style} loading={loading} onSubmit={onSubmit}>
-    <Form.Field>
+    <Form.Field required={required}>
       <label>{label}</label>
       <Control {...controlProps} value={value} onChange={onValueChange} onFocus={focus} onBlur={blur}/>
     </Form.Field>

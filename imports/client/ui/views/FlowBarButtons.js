@@ -20,7 +20,8 @@ const FlowBarButtons = compose(
 export default FlowBarButtons
 
 const IconButton = ({name, onClick}) => (
-  <div onClick={onClick} style={{height: '100%', padding: '0 0.5rem', display: 'flex', alignItems: 'center', cursor: 'pointer'}}>
+  <div onClick={onClick}
+       style={{height: '100%', padding: '0 0.5rem', display: 'flex', alignItems: 'center', cursor: 'pointer'}}>
     <Icon name={name} size="big" style={{margin: 0}}/>
   </div>
 )

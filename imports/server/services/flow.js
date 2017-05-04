@@ -22,4 +22,12 @@ export default {
     })
     return flowId
   },
+
+  /**
+   * @param flowId
+   * @param name
+   */
+  updateFlowName(flowId, name) {
+    Flows.update({_id: flowId}, {$set: {name: name}})
+  }
 }
