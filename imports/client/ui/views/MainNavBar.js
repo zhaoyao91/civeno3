@@ -40,12 +40,15 @@ const LoginItem = () => (
 
 const UserItem = compose(
   withCurrentUser('user'),
+  withProps(({user}) => ({
+    name: prop('profile.name', user)
+  })),
   withHandlers({
     onClickLogout: (props) => () => Meteor.logout()
   })
-)(({user, onClickLogout}) => (
+)(({name, onClickLogout}) => (
   <Dropdown item floating style={{paddingTop: '0.5rem', paddingBottom: '0.5rem'}}
-            trigger={<UserAvatar user={user} size={40}/>}>
+            trigger={<UserAvatar name={name} size={40}/>}>
     <Dropdown.Menu>
       <Dropdown.Item as={Link} to="/user-center">
         个人中心

@@ -26,12 +26,15 @@ const MyProfilePage = () => (
 export default MyProfilePage
 
 const MyAvatar = compose(
-  withCurrentUser('user')
-)(({user}) => (
+  withCurrentUser('user'),
+  withProps(({user}) => ({
+    name: prop('profile.name', user)
+  }))
+)(({name}) => (
   <Form>
     <Form.Field>
       <label>头像</label>
-      <UserAvatar size={150} user={user}/>
+      <UserAvatar size={150} name={name}/>
     </Form.Field>
   </Form>
 ))

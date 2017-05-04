@@ -1,11 +1,11 @@
 import React from 'react'
-import { Container, Segment } from 'semantic-ui-react'
 
 import UserCenterNavs from '../views/UserCenterNavs'
 import UserCenterProfileCard from '../views/UserCenterProfileCard'
+import SingleCenterColumnLayout from './SingleCenterColumnLayout'
 
 const UserCenterLayout = ({children}) => (
-  <Container style={{paddingTop: '1rem', display: 'flex'}}>
+  <SingleCenterColumnLayout style={{paddingTop: '1rem', display: 'flex'}}>
     <div style={{marginRight: '1rem', width: '30%', flexShrink: 0}}>
       <div style={{marginBottom: '1rem'}}>
         <UserCenterProfileCard/>
@@ -17,7 +17,7 @@ const UserCenterLayout = ({children}) => (
     <div style={{flexGrow: 1}}>
       {children}
     </div>
-  </Container>
+  </SingleCenterColumnLayout>
 )
 
 export default UserCenterLayout
