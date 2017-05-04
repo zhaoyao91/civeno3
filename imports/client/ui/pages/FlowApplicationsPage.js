@@ -5,7 +5,7 @@ import FlowBarLayout from '../layouts/FlowBarLayout'
 
 const FlowApplicationsPage = ({match}) => (
   <MainNavBarLayout>
-    <FlowBarLayout>
+    <FlowBarLayout flowId={match.params.flowId}>
       <h1>flow applications</h1>
     </FlowBarLayout>
   </MainNavBarLayout>

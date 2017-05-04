@@ -71,11 +71,10 @@ const FlowCard = compose(
 ))
 
 const FlowsView = compose(
-  setStatic('subsCache', new SubsCache()),
   withMeteorData(() => ({userId: Meteor.userId()})),
   withMeteorData(({userId}) => {
     if (userId) {
-      const sub = FlowsView.subsCache.subscribe('Flow.flowsOfOwner', userId)
+      const sub = Meteor.subscribe('Flow.flowsOfOwner', userId)
       return {
         dataReady: sub.ready()
       }
