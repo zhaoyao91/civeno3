@@ -3,12 +3,12 @@ import Users from '../collections/users'
 export default {
   /**
    * @param userId
-   * @param {Object} profile
+   * @param name
    */
-  updateProfile(userId, profile) {
+  updateProfileName(userId, name) {
     Users.update({_id: userId}, {
       $set: {
-        profile: profile
+        'profile.name': name
       }
     })
   }

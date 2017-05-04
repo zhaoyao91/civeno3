@@ -1,23 +1,24 @@
 import { Meteor } from 'meteor/meteor'
-import { check, Match } from 'meteor/check'
+import { check } from 'meteor/check'
 
+import PermissionService from '../../services/permission'
 import UserService from '../../services/user'
 
 Meteor.methods({
   /**
    * @param userId
-   * @param {Object} profile
+   * @param name
    */
-  'User.updateProfile'(userId, profile) {
+  'User.updateProfileName'(userId, name) {
     check(userId, String)
-    check(profile, Object)
+    check(name, String)
 
     if (!this.userId) {
-      throw new Meteor.Error('User.updateProfile.no-permission.not-authenticated', 'user must be logged in')
-    } else if (this.userId !== userId) {
-      throw new Meteor.Error('User.updateProfile.no-permission', 'you cannot update other user\'s profile')
+      throw new Meteor.Error('User.updateProfileName.no-permission.not-authenticated', 'user must login')
+    } else if (!PermissionService.user.allowUpdateUserProfile(this.userId, userId)) {
+      throw new Meteor.Error('User.updateProfileName.no-permission.not-authorized', 'user is not allowed to update this user\'s profile')
     }
 
-    UserService.updateProfile(userId, profile)
+    UserService.updateProfileName(userId, name)
   }
 })

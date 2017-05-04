@@ -9,7 +9,7 @@ const SavableInput = compose(
   setPropTypes({
     label: PropTypes.string,
     value: PropTypes.string,
-    save: PropTypes.func, // func(newValue)
+    save: PropTypes.func, // func(newValue, refresh)
     saving: PropTypes.bool,
     style: PropTypes.object,
     // only allow value related component
@@ -31,9 +31,9 @@ const SavableInput = compose(
   withState('value', 'setValue', ({actualValue}) => actualValue),
   withHandlers({
     onValueChange: ({setValue}) => e => setValue(e.target.value),
-    onSubmit: ({save, value}) => e => {
+    onSubmit: ({save, value, setValue}) => e => {
       e.preventDefault()
-      save(value)
+      save(value, setValue)
     },
     onReset: ({actualValue, setValue}) => () => setValue(actualValue),
   }),
