@@ -19,7 +19,7 @@ const UserCenterProfileCard = compose(
     </div>
     <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flexGrow: 1, width: 0}}>
       <NameText>{name}</NameText>
-      <EmailText>{name}</EmailText>
+      <EmailText>{email}</EmailText>
     </div>
   </Segment>
 ))

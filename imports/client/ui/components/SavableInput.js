@@ -2,27 +2,31 @@ import React from 'react'
 import { Form, Input, Button } from 'semantic-ui-react'
 import { renameProps, setPropTypes, compose, withState, withHandlers, withProps, defaultProps } from 'recompose'
 import PropTypes from 'prop-types'
+import { has } from 'lodash/fp'
 
 import withToggleState from '../hocs/with_toggle_state'
 
 const SavableInput = compose(
   setPropTypes({
+    value: PropTypes.any,
+    // async func(newValue): feedback | undefined
+    // feedback: {syncValue}
+    // syncValue # if this field is specified, the underlining temp value will be set as it
+    save: PropTypes.func,
     label: PropTypes.string,
-    value: PropTypes.string,
-    save: PropTypes.func, // func(newValue, refresh)
-    saving: PropTypes.bool,
     style: PropTypes.object,
+    required: PropTypes.bool,
     // only allow value related component
     as: PropTypes.oneOfType([
       PropTypes.func,
       PropTypes.element,
     ]),
     controlProps: PropTypes.object,
-    required: PropTypes.bool,
   }),
   defaultProps({
     as: Input
   }),
+  withToggleState('saving', 'startSaving', 'finishSaving', false),
   renameProps({
     as: 'Control',
     value: 'actualValue',
@@ -33,9 +37,15 @@ const SavableInput = compose(
     onValueChange: ({setValue, loading}) => e => {
       if (!loading) setValue(e.target.value)
     },
-    onSubmit: ({save, value, setValue}) => e => {
+    onSubmit: ({save, value, setValue, startSaving, finishSaving}) => e => {
       e.preventDefault()
-      save(value, setValue)
+      startSaving()
+      save(value)
+        .then(feedback => {
+          if (has('syncValue', feedback)) setValue(feedback['syncValue'])
+        })
+        .catch(err => console.error(err))
+        .then(finishSaving)
     },
     onReset: ({actualValue, setValue}) => () => setValue(actualValue),
   }),

@@ -52,28 +52,25 @@ const MyProfileName = compose(
     userId: PropTypes.string,
     name: PropTypes.string,
   }),
-  withToggleState('saving', 'startSaving', 'finishSaving', false),
   withHandlers({
-    save: ({startSaving, finishSaving, userId}) => (name, refresh) => {
+    save: ({userId}) => async (name) => {
       name = trim(name)
 
       if (!name) {
         return Alert.error('姓名不能为空')
       }
 
-      startSaving()
-      Meteor.call('User.updateProfileName', userId, name, (err) => {
-        finishSaving()
-        if (err) {
-          console.error(err)
-          Alert.error('姓名修改失败')
-        } else {
-          Alert.success('姓名修改成功')
-          refresh(name)
-        }
-      })
+      try {
+        await Meteor.async.call('User.updateProfileName', userId, name)
+      } catch (err) {
+        console.error(err)
+        Alert.error('姓名修改失败')
+        return
+      }
+      Alert.success('姓名修改成功')
+      return {syncValue: name}
     }
   })
-)(({name, saving, save}) => (
-  <SavableInput save={save} label="姓名" value={name} saving={saving} required/>
+)(({name, save}) => (
+  <SavableInput save={save} label="姓名" value={name} required/>
 ))
