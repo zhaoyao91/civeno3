@@ -10,6 +10,7 @@ import withToggleState from '../hocs/with_toggle_state'
 import withMeteorData from '../hocs/with_meteor_data'
 import Flows from '../../collections/flows'
 import SavableInput from '../components/SavableInput'
+import renderLoader from '../hocs/render_loader'
 
 const FlowSettingsModal = compose(
   setPropTypes({
@@ -36,7 +37,7 @@ const FlowSettings = compose(
   }),
   withMeteorData(({flowId}) => ({dataReady: Meteor.subscribe('Flow.flowOfId', flowId).ready()})),
   withMeteorData(({dataReady, flowId}) => ({flow: dataReady ? Flows.findOne(flowId) : null})),
-  branch(({dataReady}) => !dataReady, renderComponent(() => <Loader/>)),
+  branch(({dataReady}) => !dataReady, renderLoader),
   branch(({flow}) => !flow, renderNothing)
 )
 (({dataReady, flow}) => (
