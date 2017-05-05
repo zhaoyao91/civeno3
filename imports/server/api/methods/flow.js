@@ -19,7 +19,7 @@ Meteor.methods({
     })
 
     if (!this.userId) {
-      throw new Meteor.Error('Flow.createFlow.no-permission.not-authenticated', 'user must login')
+      throw new Meteor.Error('no-permission.not-authenticated', 'user must login')
     }
 
     return FlowService.createFlow({
@@ -33,13 +33,28 @@ Meteor.methods({
     check(name, String)
 
     if (!this.userId) {
-      throw new Meteor.Error('Flow.updateFlowName.no-permission.not-authenticated', 'user must login')
+      throw new Meteor.Error('no-permission.not-authenticated', 'user must login')
     }
 
     if (!PermissionService.flow.allowUpdateFlow(this.userId, flowId)) {
-      throw new Meteor.Error('Flow.updateFlowName.no-permission.not-authorized', 'user is not allowed to update this flow')
+      throw new Meteor.Error('no-permission.not-authorized', 'user is not allowed to update this flow')
     }
 
     FlowService.updateFlowName(flowId, name)
+  },
+
+  'Flow.updateFlowDescription'(flowId, description) {
+    check(flowId, String)
+    check(description, String)
+
+    if (!this.userId) {
+      throw new Meteor.Error('no-permission.not-authenticated', 'user must login')
+    }
+
+    if (!PermissionService.flow.allowUpdateFlow(this.userId, flowId)) {
+      throw new Meteor.Error('no-permission.not-authorized', 'user is not allowed to update this flow')
+    }
+
+    FlowService.updateFlowDescription(flowId, description)
   }
 })

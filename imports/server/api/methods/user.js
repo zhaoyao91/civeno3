@@ -14,9 +14,9 @@ Meteor.methods({
     check(name, String)
 
     if (!this.userId) {
-      throw new Meteor.Error('User.updateProfileName.no-permission.not-authenticated', 'user must login')
+      throw new Meteor.Error('no-permission.not-authenticated', 'user must login')
     } else if (!PermissionService.user.allowUpdateUserProfile(this.userId, userId)) {
-      throw new Meteor.Error('User.updateProfileName.no-permission.not-authorized', 'user is not allowed to update this user\'s profile')
+      throw new Meteor.Error('no-permission.not-authorized', 'user is not allowed to update this user\'s profile')
     }
 
     UserService.updateProfileName(userId, name)

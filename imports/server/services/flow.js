@@ -33,6 +33,10 @@ export default {
     Flows.update({_id: flowId}, {$set: {name: name}})
   },
 
+  updateFlowDescription(flowId, description) {
+    Flows.update({_id: flowId}, {$set: {description: description}})
+  },
+
   // check
 
   /**

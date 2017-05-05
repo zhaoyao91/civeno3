@@ -6,7 +6,6 @@ import { prop, trim } from 'lodash/fp'
 import PropTypes from 'prop-types'
 import Alert from 'react-s-alert'
 
-import withToggleState from '../hocs/with_toggle_state'
 import withMeteorData from '../hocs/with_meteor_data'
 import Flows from '../../collections/flows'
 import SavableInput from '../components/SavableInput'
@@ -87,7 +86,17 @@ const FlowDescriptionInput = compose(
   }),
   withHandlers({
     save: ({flowId}) => async description => {
-      console.log(description)
+      description = trim(description)
+
+      try {
+        await Meteor.async.call('Flow.updateFlowDescription', flowId, description)
+      } catch (err) {
+        console.error(err)
+        Alert.error('流程描述更新失败')
+        return
+      }
+      Alert.success('流程描述更新成功')
+      return {syncValue: description}
     }
   })
 )(({flowDescription, save}) => (
