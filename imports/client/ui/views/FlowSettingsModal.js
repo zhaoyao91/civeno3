@@ -1,15 +1,18 @@
 import React from 'react'
-import { Modal, TextArea } from 'semantic-ui-react'
+import { Modal, TextArea, Form, Button } from 'semantic-ui-react'
 import { setPropTypes, compose, branch, withProps, renderNothing, withHandlers } from 'recompose'
 import { Meteor } from 'meteor/meteor'
 import { prop, trim } from 'lodash/fp'
 import PropTypes from 'prop-types'
 import Alert from 'react-s-alert'
 
+import UserAvatar from '../views/UserAvatar'
 import withMeteorData from '../hocs/with_meteor_data'
 import Flows from '../../collections/flows'
 import SavableInput from '../components/SavableInput'
 import renderLoader from '../hocs/render_loader'
+import FlowUserRelations from '../../collections/flow_user_relations'
+import Users from '../../collections/users'
 
 const FlowSettingsModal = compose(
   setPropTypes({
@@ -35,8 +38,8 @@ const FlowSettings = compose(
     flowId: PropTypes.string,
   }),
   withMeteorData(({flowId}) => ({dataReady: Meteor.subscribe('Flow.flowOfId', flowId).ready()})),
-  withMeteorData(({dataReady, flowId}) => ({flow: dataReady ? Flows.findOne(flowId) : null})),
   branch(({dataReady}) => !dataReady, renderLoader),
+  withMeteorData(({flowId}) => ({flow: Flows.findOne(flowId)})),
   branch(({flow}) => !flow, renderNothing),
   withProps(({flow}) => ({
     name: prop('name', flow),
@@ -45,9 +48,9 @@ const FlowSettings = compose(
 )
 (({dataReady, flowId, name, description}) => (
   <div>
-    <FlowNameInput flowId={flowId} flowName={name}/>
-    <div style={{height: '1rem'}}/>
-    <FlowDescriptionInput flowId={flowId} flowDescription={description}/>
+    <div style={{marginBottom: '1rem'}}><FlowNameInput flowId={flowId} flowName={name}/></div>
+    <div style={{marginBottom: '1rem'}}><FlowDescriptionInput flowId={flowId} flowDescription={description}/></div>
+    <div style={{marginBottom: '1rem'}}><FlowOwnerInput flowId={flowId}/></div>
   </div>
 ))
 
@@ -102,3 +105,41 @@ const FlowDescriptionInput = compose(
 )(({flowDescription, save}) => (
   <SavableInput as={TextArea} controlProps={{autoHeight: true}} label="流程描述" value={flowDescription} save={save}/>
 ))
+
+const FlowOwnerInput = compose(
+  setPropTypes({
+    flowId: PropTypes.string,
+  }),
+  withMeteorData(({flowId}) => ({dataReady: Meteor.subscribe('Flow.ownersOfFlow', flowId).ready()})),
+  branch(({dataReady}) => !dataReady, renderLoader),
+  withMeteorData(({flowId}) => {
+    const userIds = FlowUserRelations.find({type: 'owner', flowId: flowId}).map(prop('userId'))
+    return {
+      owners: Users.find({_id: {$in: userIds}}).fetch()
+    }
+  })
+)(({flowId, owners}) => (
+  <Form>
+    <Form.Field>
+      <label>流程管理员</label>
+      <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+        <div>
+          {
+            owners.map(owner => (
+              <div key={owner._id} style={{marginRight: '1rem'}}><FlowOwnerAvatar user={owner}/></div>
+            ))
+          }
+        </div>
+        <div><TransferFlowButton flowId={flowId}/></div>
+      </div>
+    </Form.Field>
+  </Form>
+))
+
+const FlowOwnerAvatar = ({user}) => (
+  <UserAvatar name={prop('profile.name', user)} size={50}/>
+)
+
+const TransferFlowButton = ({flowId}) => (
+  <Button primary type="button">移交</Button>
+)
