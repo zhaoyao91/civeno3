@@ -1,7 +1,9 @@
 import React from 'react'
 import { Modal, Button, Form } from 'semantic-ui-react'
-import { setPropTypes, compose, withState, withHandlers, lifecycle } from 'recompose'
+import { setPropTypes, compose, withHandlers } from 'recompose'
 import PropTypes from 'prop-types'
+
+import withToggleState from '../hocs/with_toggle_state'
 
 const FormModal = compose(
   setPropTypes({
@@ -9,14 +11,17 @@ const FormModal = compose(
     open: PropTypes.bool,
     onOpen: PropTypes.func,
     onClose: PropTypes.func,
-    submit: PropTypes.func,
-    submitting: PropTypes.bool,
+    submit: PropTypes.func, // async func()
     header: PropTypes.string,
   }),
+  withToggleState('submitting', 'startSubmitting', 'finishSubmitting', false),
   withHandlers({
-    onSubmit: ({submit}) => e => {
+    onSubmit: ({submit, startSubmitting, finishSubmitting}) => e => {
       e.preventDefault()
+      startSubmitting()
       submit()
+        .catch(err => console.error(err))
+        .then(finishSubmitting)
     }
   })
 )(({children, trigger, open, onOpen, onClose, onSubmit, submit, submitting, header}) => (
