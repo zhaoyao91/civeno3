@@ -1,4 +1,5 @@
 import Users from '../collections/users'
+import { Accounts } from 'meteor/accounts-base'
 
 export default {
   /**
@@ -11,5 +12,13 @@ export default {
         'profile.name': name
       }
     })
+  },
+
+  /**
+   * @param email
+   * @returns user
+   */
+  findUserByEmail(email) {
+    return Accounts.findUserByEmail(email)
   }
 }

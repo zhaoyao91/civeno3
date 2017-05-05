@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, TextArea, Form, Button } from 'semantic-ui-react'
+import { Modal, TextArea, Form, Button, Dropdown, Input } from 'semantic-ui-react'
 import { setPropTypes, compose, branch, withProps, renderNothing, withHandlers } from 'recompose'
 import { Meteor } from 'meteor/meteor'
 import { prop, trim } from 'lodash/fp'
@@ -13,6 +13,8 @@ import SavableInput from '../components/SavableInput'
 import renderLoader from '../hocs/render_loader'
 import FlowUserRelations from '../../collections/flow_user_relations'
 import Users from '../../collections/users'
+import SearchUserByEmailModal from './SearchUserByEmailModal'
+import withToggleState from '../hocs/with_toggle_state'
 
 const FlowSettingsModal = compose(
   setPropTypes({
@@ -140,6 +142,9 @@ const FlowOwnerAvatar = ({user}) => (
   <UserAvatar name={prop('profile.name', user)} size={50}/>
 )
 
-const TransferFlowButton = ({flowId}) => (
-  <Button primary type="button">移交</Button>
-)
+const TransferFlowButton = compose(
+  withToggleState('modalVisible', 'openModal', 'closeModal', false)
+)(({flowId, modalVisible, openModal, closeModal}) => (
+  <SearchUserByEmailModal open={modalVisible} onOpen={openModal} onClose={closeModal} header="移交流程"
+                          trigger={<Button type="button" primary>移交</Button>}/>
+))

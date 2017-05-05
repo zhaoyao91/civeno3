@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor'
 import { check } from 'meteor/check'
+import { pick } from 'lodash/fp'
 
 import PermissionService from '../../services/permission'
 import UserService from '../../services/user'
@@ -20,5 +21,24 @@ Meteor.methods({
     }
 
     UserService.updateProfileName(userId, name)
+  },
+
+  /**
+   * find user by email
+   * only return its profile
+   * @param email
+   * @returns user | null
+   */
+  'User.findUserByEmail'(email) {
+    check(email, String)
+
+    if (!this.userId) {
+      throw new Meteor.Error('no-permission.not-authenticated', 'user must login')
+    }
+
+    const user = UserService.findUserByEmail(email)
+
+    if (user) return pick(['_id', 'profile'], user)
+    else return null
   }
 })
