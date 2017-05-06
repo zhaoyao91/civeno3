@@ -143,8 +143,13 @@ const FlowOwnerAvatar = ({user}) => (
 )
 
 const TransferFlowButton = compose(
-  withToggleState('modalVisible', 'openModal', 'closeModal', false)
-)(({flowId, modalVisible, openModal, closeModal}) => (
-  <SearchUserByEmailModal open={modalVisible} onOpen={openModal} onClose={closeModal} header="移交流程"
+  withToggleState('modalVisible', 'openModal', 'closeModal', false),
+  withHandlers({
+    submit: ({flowId}) => async user => {
+      console.log('transfer owner to ', user)
+    }
+  })
+)(({flowId, modalVisible, openModal, closeModal, submit}) => (
+  <SearchUserByEmailModal open={modalVisible} onOpen={openModal} onClose={closeModal} header="移交流程" submit={submit}
                           trigger={<Button type="button" primary>移交</Button>}/>
 ))

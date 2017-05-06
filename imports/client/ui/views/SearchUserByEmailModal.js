@@ -1,5 +1,5 @@
 import React from 'react'
-import { compose, renameProp, withState, setPropTypes, withHandlers, withProps, setDisplayName } from 'recompose'
+import { pure, compose, renameProp, withState, setPropTypes, withHandlers, withProps, setDisplayName } from 'recompose'
 import PropTypes from 'prop-types'
 import { Form, Input, Message } from 'semantic-ui-react'
 import { Meteor } from 'meteor/meteor'
@@ -36,11 +36,15 @@ const SearchUserByEmailModal = compose(
       setRevoked(false)
       setUser(user)
     },
+    submit: ({submitUser, user}) => async () => {
+      return await submitUser(user)
+    }
   })
 )(({trigger, open, onOpen, onClose, submit, header, allowSubmit, onRevokeUser, onNoUser, onFindUser, user, revoked}) => (
   <FormModal trigger={trigger} open={open} onOpen={onOpen} onClose={onClose} submit={submit} header={header}
              allowSubmit={allowSubmit}>
     <SearchUserInput onRevokeUser={onRevokeUser} onNoUser={onNoUser} onFindUser={onFindUser}/>
+    {revoked && <WaitView/>}
     {(!revoked && !user) && <NoUserView/>}
     {(!revoked && user) && <UserView user={user}/>}
   </FormModal>
@@ -49,16 +53,18 @@ const SearchUserByEmailModal = compose(
 export default SearchUserByEmailModal
 
 const NoUserView = () => (
-  <Message warning visible>没有找到该用户</Message>
+  <Message style={{margin: 0}} warning visible>没有找到该用户</Message>
+)
+
+const WaitView = () => (
+  <Message style={{margin: 0}} visible>请输入完整邮箱地址以查询用户</Message>
 )
 
 const UserView = ({user}) => (
-  <Message success visible>
-    <div style={{display: 'flex'}}>
-      <UserAvatar name={prop('profile.name', user)} size={40}/>
-      <p style={{marginLeft: '1rem'}}>{prop('profile.name', user)}</p>
-    </div>
-  </Message>
+  <div style={{display: 'flex', alignItems: 'center'}}>
+    <UserAvatar name={prop('profile.name', user)} size={47}/>
+    <p style={{marginLeft: '1rem'}}>{prop('profile.name', user)}</p>
+  </div>
 )
 
 const SearchUserInput = compose(
@@ -67,6 +73,7 @@ const SearchUserInput = compose(
     onNoUser: PropTypes.func,
     onFindUser: PropTypes.func, // func(user)
   }),
+  pure,
   withState('loading', 'setLoading', false),
   withHandlers({
     findUser: ({onNoUser, onFindUser, setLoading}) => debounce(800, email => {
@@ -93,11 +100,10 @@ const SearchUserInput = compose(
       onRevokeUser()
       findUser(email)
     }
-  })
-)(({onEmailChange, showIcon, loading}) => (
+  }),
+)(({onEmailChange, loading}) => (
   <Form.Field required>
     <label>邮箱</label>
-    <Input onChange={onEmailChange} autoFocus type="email" icon="search" loading={loading}
-           placeholder="请输入邮箱以查询用户"/>
+    <Input onChange={onEmailChange} autoFocus type="email" icon="search" loading={loading}/>
   </Form.Field>
 ))

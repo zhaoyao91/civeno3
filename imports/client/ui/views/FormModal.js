@@ -1,11 +1,12 @@
 import React from 'react'
 import { Modal, Button, Form } from 'semantic-ui-react'
-import { setPropTypes, compose, withHandlers, defaultProps } from 'recompose'
+import { setDisplayName, setPropTypes, compose, withHandlers, defaultProps, withProps } from 'recompose'
 import PropTypes from 'prop-types'
 
 import withToggleState from '../hocs/with_toggle_state'
 
 const FormModal = compose(
+  setDisplayName('FormModal'),
   setPropTypes({
     trigger: PropTypes.element,
     open: PropTypes.bool,
@@ -19,9 +20,11 @@ const FormModal = compose(
     allowSubmit: true
   }),
   withToggleState('submitting', 'startSubmitting', 'finishSubmitting', false),
+  withProps(({allowSubmit, submitting}) => ({
+    allowSubmit: allowSubmit && !submitting
+  })),
   withHandlers({
-    onSubmit: ({submit, startSubmitting, finishSubmitting, allowSubmit}) => e => {
-      e.preventDefault()
+    submitForm: ({submit, startSubmitting, finishSubmitting, allowSubmit}) => () => {
       if (allowSubmit) {
         startSubmitting()
         submit()
@@ -29,8 +32,14 @@ const FormModal = compose(
           .then(finishSubmitting)
       }
     }
+  }),
+  withHandlers({
+    onSubmit: ({submitForm}) => e => {
+      e.preventDefault()
+      submitForm()
+    }
   })
-)(({children, trigger, open, onOpen, onClose, onSubmit, submit, submitting, allowSubmit, header}) => (
+)(({children, trigger, open, onOpen, onClose, onSubmit, submitForm, submitting, allowSubmit, header}) => (
   <Modal size="small" open={open} trigger={trigger} onOpen={onOpen} onClose={onClose} closeIcon='close'>
     <Modal.Header content={header}/>
     <Modal.Content>
@@ -41,7 +50,7 @@ const FormModal = compose(
     </Modal.Content>
     <Modal.Actions>
       <Button onClick={onClose}>返回</Button>
-      <Button primary onClick={submit} disabled={!allowSubmit}>确认</Button>
+      <Button primary onClick={submitForm} disabled={!allowSubmit}>确认</Button>
     </Modal.Actions>
   </Modal>
 ))
