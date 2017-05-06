@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, TextArea, Form, Button, Dropdown, Input } from 'semantic-ui-react'
+import { Modal, TextArea, Form, Button } from 'semantic-ui-react'
 import { setPropTypes, compose, branch, withProps, renderNothing, withHandlers } from 'recompose'
 import { Meteor } from 'meteor/meteor'
 import { prop, trim } from 'lodash/fp'
@@ -145,8 +145,23 @@ const FlowOwnerAvatar = ({user}) => (
 const TransferFlowButton = compose(
   withToggleState('modalVisible', 'openModal', 'closeModal', false),
   withHandlers({
-    submit: ({flowId}) => async user => {
-      console.log('transfer owner to ', user)
+    submit: ({flowId, closeModal}) => async user => {
+      const confirmed = confirm('确定要移交流程？')
+      if (!confirmed) return
+
+      try {
+        await Meteor.async.call('Flow.transferFlow', flowId, prop('_id', user))
+      } catch (err) {
+        console.error(err)
+        if (err.error === 'no-permission.not-authorized') {
+          Alert.error('没有权限')
+        } else {
+          Alert.error('流程移交失败')
+        }
+        return
+      }
+      Alert.success('流程移交成功')
+      closeModal()
     }
   })
 )(({flowId, modalVisible, openModal, closeModal, submit}) => (

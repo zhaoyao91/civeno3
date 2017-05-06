@@ -3,6 +3,7 @@ import { check, Match } from 'meteor/check'
 
 import PermissionService from '../../services/permission'
 import FlowService from '../../services/flow'
+import UserService from '../../services/user'
 
 Meteor.methods({
   /**
@@ -56,5 +57,24 @@ Meteor.methods({
     }
 
     FlowService.updateFlowDescription(flowId, description)
-  }
+  },
+
+  'Flow.transferFlow'(flowId, targetUserId) {
+    check(flowId, String)
+    check(targetUserId, String)
+
+    if (!this.userId) {
+      throw new Meteor.Error('no-permission.not-authenticated', 'user must login')
+    }
+
+    if (!PermissionService.flow.allowTransferFlow(this.userId, flowId)) {
+      throw new Meteor.Error('no-permission.not-authorized', 'user is not allowed to transfer this flow')
+    }
+
+    if (!UserService.userExists(targetUserId)) {
+      throw new Meteor.Error('invalid-condition.no-target-user', 'cannot find target user')
+    }
+
+    FlowService.transferFlow(flowId, targetUserId)
+  },
 })

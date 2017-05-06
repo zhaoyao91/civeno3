@@ -10,6 +10,10 @@ const PermissionService = {
   flow: {
     allowUpdateFlow(userId, flowId) {
       return FlowService.userIsFlowOwner(userId, flowId)
+    },
+
+    allowTransferFlow(userId, flowId) {
+      return FlowService.userIsFlowOwner(userId, flowId)
     }
   }
 }

@@ -1,3 +1,5 @@
+import { prop } from 'lodash/fp'
+
 import Flows from '../collections/flows'
 import FlowUserRelations from '../collections/flow_user_relations'
 
@@ -35,6 +37,25 @@ export default {
 
   updateFlowDescription(flowId, description) {
     Flows.update({_id: flowId}, {$set: {description: description}})
+  },
+
+  addOwner(flowId, owner) {
+    const relation = {type: 'owner', flowId: flowId, userId: owner}
+    FlowUserRelations.upsert(relation, {$set: relation})
+  },
+
+  removeOwner(flowId, owner) {
+    FlowUserRelations.remove({type: 'owner', flowId: flowId, userId: owner})
+  },
+
+  transferFlow(flowId, targetUserId) {
+    FlowUserRelations.find({type: 'owner', flowId: flowId}, {
+      fields: {
+        _id: 0,
+        userId: 1
+      }
+    }).forEach(ownerShip => this.removeOwner(flowId, ownerShip.userId))
+    this.addOwner(flowId, targetUserId)
   },
 
   // check
