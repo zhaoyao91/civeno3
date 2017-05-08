@@ -197,25 +197,27 @@ const FlowStructureNotFrozenField = compose(
   defineComponent('FlowStructureNotFrozenField', {
     flowId: PropTypes.string
   }),
-  withConfirm('confirm', {
-    header: '起用流程',
-    content: '流程起用后，将不能再对流程结构进行修改。确认要起用流程？',
-    confirmButton: '确认',
-    cancelButton: '取消'
-  }),
+  withConfirm('confirm', 'Confirm'),
   withHandlers({
     onSubmit: ({flowId, confirm}) => e => {
       e.preventDefault()
       confirm().then(ok => console.log({ok}))
     }
   })
-)(({onSubmit, confirming, onCancel, onConfirm}) => (
+)(({onSubmit, Confirm}) => (
   <Form onSubmit={onSubmit}>
     <Form.Field>
       <label>流程起用</label>
       <div style={{display: 'flex', alignItems: 'center'}}>
         <div style={{flexGrow: 1, marginRight: '1rem'}}><Message visible error style={{margin: 0}}>未起用</Message></div>
-        <div><Button primary>起用</Button></div>
+        <div>
+          <Button primary>起用</Button>
+          <Confirm
+            header="确定起用流程？"
+            content={<Message warning visible style={{margin: '1rem'}}>起用流程后，将不能再修改流程结构。确定要起用流程？</Message>}
+            confirmButton="确定"
+            cancelButton="取消"/>
+        </div>
       </div>
     </Form.Field>
   </Form>
