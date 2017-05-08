@@ -1,7 +1,16 @@
 import Users from '../collections/users'
 import { Accounts } from 'meteor/accounts-base'
+import { check, Match } from 'meteor/check'
+
+import Condition from './lib/condition'
 
 export default {
+  conditions: {
+    userExists: new Condition((userId) => {
+      return Users.find({_id: userId}, {fields: {_id: 1}, limit: 1}).count() > 0
+    }, 'no-user', 'cannot find this user')
+  },
+
   // update
 
   /**

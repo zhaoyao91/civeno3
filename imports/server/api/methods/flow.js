@@ -7,10 +7,16 @@ import UserService from '../../services/user'
 
 Meteor.methods({
   /**
+   * create a flow
+   * @permission
+   * - user login
+   * @pre
+   * @post
+   * - a new flow was created
+   * - current user became the owner of the flow
    * @param flow
    * @param flow.name
    * @param [flow.description]
-   *
    * @returns flowId
    */
   'Flow.createFlow'(flow) {

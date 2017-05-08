@@ -1,9 +1,74 @@
 import { prop } from 'lodash/fp'
+import { check, Match } from 'meteor/check'
 
+import Condition from './lib/condition'
 import Flows from '../collections/flows'
 import FlowUserRelations from '../collections/flow_user_relations'
+import UserService from './user'
 
-export default {
+const FlowService = {
+  actions: {
+    /**
+     * create a flow
+     * @pre
+     * @post
+     * - a new flow was created
+     * @param flow
+     * @param flow.name
+     * @param [flow.description]
+     * @returns flowId
+     */
+    createFlow(flow) {
+      check(flow, {
+        name: String,
+        description: Match.Optional(String)
+      })
+
+      return Flows.insert({
+        ...flow,
+        createdAt: new Date()
+      })
+    },
+
+    /**
+     * add a owner for flow
+     * @pre
+     * - flow exists
+     * - owner exists
+     * - flow has no owner
+     * @post
+     * - an ownership between the flow and user was created
+     * @param flowId
+     * @param owner
+     */
+    addOwner(flowId, owner) {
+      check(flowId, String)
+      check(owner, String)
+
+      FlowService.conditions.flowExists.check(flowId)
+      UserService.conditions.userExists.check(owner)
+      FlowService.conditions.flowHasNoOwner.check(flowId)
+
+      FlowUserRelations.insert({type: 'owner', flowId: flowId, userId: owner})
+    }
+  },
+
+  queries: {},
+
+  conditions: {
+    flowExists: new Condition((flowId) => {
+      return Flows.find({_id: flowId}, {fields: {_id: 1}, limit: 1}).count() > 0
+    }, 'no-flow', 'cannot find this flow'),
+
+    flowHasOwner: new Condition((flowId) => {
+      return FlowUserRelations.find({type: 'owner', flowId}, {fields: {_id: 1}, limit: 1}).count() > 0
+    }, 'flow-has-no-owner', 'flow does not has any owner'),
+
+    flowHasNoOwner: new Condition((flowId) => {
+      return !FlowService.conditions.flowHasOwner.judge(flowId)
+    }, 'flow-has-owner', 'flow already has owner')
+  },
+
   // update
 
   /**
@@ -103,3 +168,5 @@ export default {
     return Flows.find({_id: flowId}, {fields: {_id: 1}, limit: 1}).count() > 0
   }
 }
+
+export default FlowService
