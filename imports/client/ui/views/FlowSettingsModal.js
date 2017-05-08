@@ -187,7 +187,7 @@ const FlowStructureFrozenStateField = ({flowId, structureFrozen}) => {
 const FlowStructureFrozenField = () => (
   <Form>
     <Form.Field>
-      <label>流程起用</label>
+      <label>起用状态</label>
       <Message visible success style={{margin: 0}}>已起用</Message>
     </Form.Field>
   </Form>
@@ -201,7 +201,16 @@ const FlowStructureNotFrozenField = compose(
   withHandlers({
     onSubmit: ({flowId, confirm}) => e => {
       e.preventDefault()
-      confirm().then(ok => console.log({ok}))
+      confirm().then(ok => {
+        if (ok) {
+          Meteor.async.call('Flow.freezeFlowStructure', flowId).then(() => {
+            Alert.success('流程起用成功')
+          }).catch(err => {
+            console.error(err)
+            Alert.error('流程起用失败')
+          })
+        }
+      })
     }
   })
 )(({onSubmit, Confirm}) => (
