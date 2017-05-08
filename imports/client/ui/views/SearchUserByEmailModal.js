@@ -76,7 +76,7 @@ const SearchUserInput = compose(
   pure,
   withState('loading', 'setLoading', false),
   withHandlers({
-    findUser: ({onNoUser, onFindUser, setLoading}) => debounce(800, email => {
+    findUser: ({onNoUser, onFindUser, setLoading}) => debounce(750, email => {
         if (isEmail(email)) {
           setLoading(true)
           Meteor.call('User.findUserByEmail', email, (err, user) => {

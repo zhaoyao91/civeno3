@@ -4,10 +4,10 @@ import { setDisplayName, setPropTypes, compose, withHandlers, defaultProps, with
 import PropTypes from 'prop-types'
 
 import withToggleState from '../hocs/with_toggle_state'
+import defineComponent from '../hocs/define_component'
 
 const FormModal = compose(
-  setDisplayName('FormModal'),
-  setPropTypes({
+  defineComponent('FormModal', {
     trigger: PropTypes.element,
     open: PropTypes.bool,
     onOpen: PropTypes.func,

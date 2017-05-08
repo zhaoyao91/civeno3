@@ -156,9 +156,10 @@ const FlowOwnerAvatar = ({user}) => (
 const TransferFlowButton = compose(
   withToggleState('modalVisible', 'openModal', 'closeModal', false),
   withRouter,
+  withConfirm('confirm', 'Confirm'),
   withHandlers({
-    submit: ({flowId, closeModal, history}) => async user => {
-      const confirmed = confirm('确定要移交流程？')
+    submit: ({flowId, history, confirm}) => async user => {
+      const confirmed = await confirm()
       if (!confirmed) return
 
       try {
@@ -173,12 +174,19 @@ const TransferFlowButton = compose(
         return
       }
       Alert.success('流程移交成功')
-      history.push('/')
+      setTimeout(() => history.push('/'), 0)
     }
   })
-)(({flowId, modalVisible, openModal, closeModal, submit}) => (
-  <SearchUserByEmailModal open={modalVisible} onOpen={openModal} onClose={closeModal} header="移交流程" submit={submit}
-                          trigger={<Button type="button" primary>移交</Button>}/>
+)(({flowId, modalVisible, openModal, closeModal, submit, Confirm}) => (
+  <div>
+    <SearchUserByEmailModal open={modalVisible} onOpen={openModal} onClose={closeModal} header="移交流程" submit={submit}
+                            trigger={<Button type="button" primary>移交</Button>}/>
+    <Confirm
+      header="确定移交流程？"
+      content={<Message warning visible style={{margin: '1rem'}}>移交后，您将不能再管理该流程。确定要移交流程？</Message>}
+      confirmButton="确定"
+      cancelButton="取消"/>
+  </div>
 ))
 
 const FlowStructureFrozenStateField = ({flowId, structureFrozen}) => {

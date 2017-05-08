@@ -28,13 +28,13 @@ export default function (confirmName, componentName) {
       request = {
         confirm: () => {
           request = null
-          resolve(true)
           open.set(false)
+          resolve(true)
         },
         cancel: () => {
           request = null
-          resolve(false)
           open.set(false)
+          resolve(false)
         },
         cancelWithoutClose: () => {
           request = null
