@@ -80,5 +80,26 @@ export default {
         userId: userId,
         flowId: flowId
       }, {fields: {_id: 1}, limit: 1}).count() > 0
+  },
+
+  /**
+   * check if the flow structure is frozen
+   * @param flowId
+   * @returns {Boolean} result
+   */
+  freezeFlowStructureIsFrozen(flowId) {
+    return Flows.find({
+        _id: flowId,
+        structureFrozen: true
+      }, {fields: {_id: 1}, limit: 1}).count() > 0
+  },
+
+  /**
+   * check if the flow exists
+   * @param flowId
+   * @returns {Boolean} result
+   */
+  checkFlowExists(flowId) {
+    return Flows.find({_id: flowId}, {fields: {_id: 1}, limit: 1}).count() > 0
   }
 }
