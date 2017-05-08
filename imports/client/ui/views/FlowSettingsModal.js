@@ -50,13 +50,13 @@ const FlowSettings = compose(
 )
 (({dataReady, flowId, name, description}) => (
   <div>
-    <div style={{marginBottom: '1rem'}}><FlowNameInput flowId={flowId} flowName={name}/></div>
-    <div style={{marginBottom: '1rem'}}><FlowDescriptionInput flowId={flowId} flowDescription={description}/></div>
-    <div style={{marginBottom: '1rem'}}><FlowOwnerInput flowId={flowId}/></div>
+    <div style={{marginBottom: '1rem'}}><FlowNameInputField flowId={flowId} flowName={name}/></div>
+    <div style={{marginBottom: '1rem'}}><FlowDescriptionInputField flowId={flowId} flowDescription={description}/></div>
+    <div style={{marginBottom: '1rem'}}><FlowOwnerField flowId={flowId}/></div>
   </div>
 ))
 
-const FlowNameInput = compose(
+const FlowNameInputField = compose(
   setPropTypes({
     flowId: PropTypes.string,
     flowName: PropTypes.string,
@@ -84,7 +84,7 @@ const FlowNameInput = compose(
   <SavableInputField required label="流程名称" value={flowName} save={save}/>
 ))
 
-const FlowDescriptionInput = compose(
+const FlowDescriptionInputField = compose(
   setPropTypes({
     flowId: PropTypes.string,
     flowDescription: PropTypes.string,
@@ -108,7 +108,7 @@ const FlowDescriptionInput = compose(
   <SavableInputField as={TextArea} controlProps={{autoHeight: true}} label="流程描述" value={flowDescription} save={save}/>
 ))
 
-const FlowOwnerInput = compose(
+const FlowOwnerField = compose(
   setPropTypes({
     flowId: PropTypes.string,
   }),
