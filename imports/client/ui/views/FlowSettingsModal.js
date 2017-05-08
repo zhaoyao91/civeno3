@@ -5,6 +5,7 @@ import { Meteor } from 'meteor/meteor'
 import { prop, trim } from 'lodash/fp'
 import PropTypes from 'prop-types'
 import Alert from 'react-s-alert'
+import { withRouter } from 'react-router-dom'
 
 import UserAvatar from '../views/UserAvatar'
 import withMeteorData from '../hocs/with_meteor_data'
@@ -154,8 +155,9 @@ const FlowOwnerAvatar = ({user}) => (
 
 const TransferFlowButton = compose(
   withToggleState('modalVisible', 'openModal', 'closeModal', false),
+  withRouter,
   withHandlers({
-    submit: ({flowId, closeModal}) => async user => {
+    submit: ({flowId, closeModal, history}) => async user => {
       const confirmed = confirm('确定要移交流程？')
       if (!confirmed) return
 
@@ -171,7 +173,7 @@ const TransferFlowButton = compose(
         return
       }
       Alert.success('流程移交成功')
-      closeModal()
+      history.push('/')
     }
   })
 )(({flowId, modalVisible, openModal, closeModal, submit}) => (
