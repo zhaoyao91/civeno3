@@ -1,6 +1,6 @@
 import React from 'react'
-import { Modal, TextArea, Form, Button } from 'semantic-ui-react'
-import { setPropTypes, compose, branch, withProps, renderNothing, withHandlers } from 'recompose'
+import { Modal, TextArea, Form, Button, Message } from 'semantic-ui-react'
+import { setPropTypes, compose, branch, withProps, renderNothing, withHandlers, withState } from 'recompose'
 import { Meteor } from 'meteor/meteor'
 import { prop, trim } from 'lodash/fp'
 import PropTypes from 'prop-types'
@@ -15,6 +15,8 @@ import FlowUserRelations from '../../collections/flow_user_relations'
 import Users from '../../collections/users'
 import SearchUserByEmailModal from './SearchUserByEmailModal'
 import withToggleState from '../hocs/with_toggle_state'
+import defineComponent from '../hocs/define_component'
+import withConfirm from '../hocs/with_confirm'
 
 const FlowSettingsModal = compose(
   setPropTypes({
@@ -45,16 +47,24 @@ const FlowSettings = compose(
   branch(({flow}) => !flow, renderNothing),
   withProps(({flow}) => ({
     name: prop('name', flow),
-    description: prop('description', flow)
+    description: prop('description', flow),
+    structureFrozen: prop('structureFrozen', flow)
   })),
 )
-(({dataReady, flowId, name, description}) => (
+(({dataReady, flowId, name, description, structureFrozen}) => (
   <div>
-    <div style={{marginBottom: '1rem'}}><FlowNameInputField flowId={flowId} flowName={name}/></div>
-    <div style={{marginBottom: '1rem'}}><FlowDescriptionInputField flowId={flowId} flowDescription={description}/></div>
-    <div style={{marginBottom: '1rem'}}><FlowOwnerField flowId={flowId}/></div>
+    <SettingItemWrapper><FlowNameInputField flowId={flowId} flowName={name}/></SettingItemWrapper>
+    <SettingItemWrapper><FlowDescriptionInputField flowId={flowId} flowDescription={description}/></SettingItemWrapper>
+    <SettingItemWrapper><FlowOwnerField flowId={flowId}/></SettingItemWrapper>
+    <SettingItemWrapper>
+      <FlowStructureFrozenStateField flowId={flowId} structureFrozen={structureFrozen}/>
+    </SettingItemWrapper>
   </div>
 ))
+
+const SettingItemWrapper = ({children}) => (
+  <div style={{marginBottom: '1rem'}}>{children}</div>
+)
 
 const FlowNameInputField = compose(
   setPropTypes({
@@ -168,3 +178,46 @@ const TransferFlowButton = compose(
   <SearchUserByEmailModal open={modalVisible} onOpen={openModal} onClose={closeModal} header="移交流程" submit={submit}
                           trigger={<Button type="button" primary>移交</Button>}/>
 ))
+
+const FlowStructureFrozenStateField = ({flowId, structureFrozen}) => {
+  if (structureFrozen) return <FlowStructureFrozenField/>
+  else return <FlowStructureNotFrozenField flowId={flowId}/>
+}
+
+const FlowStructureFrozenField = () => (
+  <Form>
+    <Form.Field>
+      <label>流程起用</label>
+      <Message visible success style={{margin: 0}}>已起用</Message>
+    </Form.Field>
+  </Form>
+)
+
+const FlowStructureNotFrozenField = compose(
+  defineComponent('FlowStructureNotFrozenField', {
+    flowId: PropTypes.string
+  }),
+  withConfirm('confirm', {
+    header: '起用流程',
+    content: '流程起用后，将不能再对流程结构进行修改。确认要起用流程？',
+    confirmButton: '确认',
+    cancelButton: '取消'
+  }),
+  withHandlers({
+    onSubmit: ({flowId, confirm}) => e => {
+      e.preventDefault()
+      confirm().then(ok => console.log({ok}))
+    }
+  })
+)(({onSubmit, confirming, onCancel, onConfirm}) => (
+  <Form onSubmit={onSubmit}>
+    <Form.Field>
+      <label>流程起用</label>
+      <div style={{display: 'flex', alignItems: 'center'}}>
+        <div style={{flexGrow: 1, marginRight: '1rem'}}><Message visible error style={{margin: 0}}>未起用</Message></div>
+        <div><Button primary>起用</Button></div>
+      </div>
+    </Form.Field>
+  </Form>
+))
+
