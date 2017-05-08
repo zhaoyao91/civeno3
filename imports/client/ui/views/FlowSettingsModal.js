@@ -149,7 +149,7 @@ const FlowOwnerField = compose(
 ))
 
 const FlowOwnerAvatar = ({user}) => (
-  <UserAvatar name={prop('profile.name', user)} size={50}/>
+  <UserAvatar name={prop('profile.name', user)} size={40}/>
 )
 
 const TransferFlowButton = compose(
