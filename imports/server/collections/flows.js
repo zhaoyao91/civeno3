@@ -15,7 +15,12 @@ Flows.attachSchema(new SimpleSchema({
 
   createdAt: {
     type: Date
-  }
+  },
+
+  structureFrozen: {
+    type: Boolean,
+    optional: true,
+  },
 }))
 
 export default Flows

@@ -77,4 +77,21 @@ Meteor.methods({
 
     FlowService.transferFlow(flowId, targetUserId)
   },
+
+  /**
+   * @param flowId
+   */
+  'Flow.freezeFlowStructure'(flowId) {
+    check(flowId, String)
+
+    if (!this.userId) {
+      throw new Meteor.Error('no-permission.not-authenticated', 'user must login')
+    }
+
+    if (!PermissionService.flow.allowUpdateFlow(this.userId, flowId)) {
+      throw new Meteor.Error('no-permission.not-authorized', 'user is not allowed to update this flow')
+    }
+
+    FlowService.freezeFlowStructure(flowId)
+  }
 })

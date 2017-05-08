@@ -58,6 +58,14 @@ export default {
     this.addOwner(flowId, targetUserId)
   },
 
+  freezeFlowStructure(flowId) {
+    Flows.update({_id: flowId}, {
+      $set: {
+        structureFrozen: true
+      }
+    })
+  },
+
   // check
 
   /**
