@@ -9,6 +9,7 @@ import { debounce, prop } from 'lodash/fp'
 
 import UserAvatar from './UserAvatar'
 import FormModal from './FormModal'
+import onToggle from '../hocs/on_toggle'
 
 const SearchUserByEmailModal = compose(
   setDisplayName('SearchUserByEmailModal'),
@@ -23,6 +24,10 @@ const SearchUserByEmailModal = compose(
   renameProp('submit', 'submitUser'),
   withState('revoked', 'setRevoked', true),
   withState('user', 'setUser', null),
+  onToggle('open', ({setRevoked, setUser}) => {
+    setRevoked(true)
+    setUser(null)
+  }),
   withProps(({user, revoked}) => ({
     allowSubmit: !revoked && !!user
   })),
@@ -39,7 +44,7 @@ const SearchUserByEmailModal = compose(
     submit: ({submitUser, user}) => async () => {
       return await submitUser(user)
     }
-  })
+  }),
 )(({trigger, open, onOpen, onClose, submit, header, allowSubmit, onRevokeUser, onNoUser, onFindUser, user, revoked}) => (
   <FormModal trigger={trigger} open={open} onOpen={onOpen} onClose={onClose} submit={submit} header={header}
              allowSubmit={allowSubmit}>

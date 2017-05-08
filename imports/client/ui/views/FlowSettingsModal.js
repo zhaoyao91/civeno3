@@ -226,7 +226,7 @@ const FlowStructureNotFrozenField = compose(
 )(({onSubmit, Confirm}) => (
   <Form onSubmit={onSubmit}>
     <Form.Field>
-      <label>流程起用</label>
+      <label>起用状态</label>
       <div style={{display: 'flex', alignItems: 'center'}}>
         <div style={{flexGrow: 1, marginRight: '1rem'}}><Message visible error style={{margin: 0}}>未起用</Message></div>
         <div>
