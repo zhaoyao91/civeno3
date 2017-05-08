@@ -241,4 +241,3 @@ const FlowStructureNotFrozenField = compose(
     </Form.Field>
   </Form>
 ))
-
