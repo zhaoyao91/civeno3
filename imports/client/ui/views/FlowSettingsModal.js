@@ -9,7 +9,7 @@ import Alert from 'react-s-alert'
 import UserAvatar from '../views/UserAvatar'
 import withMeteorData from '../hocs/with_meteor_data'
 import Flows from '../../collections/flows'
-import SavableInput from '../components/SavableInput'
+import SavableInputField from '../components/SavableInputField'
 import renderLoader from '../hocs/render_loader'
 import FlowUserRelations from '../../collections/flow_user_relations'
 import Users from '../../collections/users'
@@ -81,7 +81,7 @@ const FlowNameInput = compose(
     }
   })
 )(({flowName, save}) => (
-  <SavableInput required label="流程名称" value={flowName} save={save}/>
+  <SavableInputField required label="流程名称" value={flowName} save={save}/>
 ))
 
 const FlowDescriptionInput = compose(
@@ -105,7 +105,7 @@ const FlowDescriptionInput = compose(
     }
   })
 )(({flowDescription, save}) => (
-  <SavableInput as={TextArea} controlProps={{autoHeight: true}} label="流程描述" value={flowDescription} save={save}/>
+  <SavableInputField as={TextArea} controlProps={{autoHeight: true}} label="流程描述" value={flowDescription} save={save}/>
 ))
 
 const FlowOwnerInput = compose(

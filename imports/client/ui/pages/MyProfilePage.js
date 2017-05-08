@@ -11,7 +11,7 @@ import withCurrentUser from '../hocs/with_current_user'
 import MainNavBarLayout from '../layouts/MainNavBarLayout'
 import UserCenterLayout from '../layouts/UserCenterLayout'
 import UserAvatar from '../views/UserAvatar'
-import SavableInput from '../components/SavableInput'
+import SavableInputField from '../components/SavableInputField'
 import withToggleState from '../hocs/with_toggle_state'
 
 const MyProfilePage = () => (
@@ -72,5 +72,5 @@ const MyProfileName = compose(
     }
   })
 )(({name, save}) => (
-  <SavableInput save={save} label="姓名" value={name} required/>
+  <SavableInputField save={save} label="姓名" value={name} required/>
 ))

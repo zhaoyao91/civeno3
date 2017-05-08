@@ -6,7 +6,7 @@ import { has } from 'lodash/fp'
 
 import withToggleState from '../hocs/with_toggle_state'
 
-const SavableInput = compose(
+const SavableInputField = compose(
   setPropTypes({
     value: PropTypes.any,
     // async func(newValue): feedback | undefined
@@ -74,4 +74,4 @@ const SavableInput = compose(
   </Form>
 ))
 
-export default SavableInput
+export default SavableInputField
