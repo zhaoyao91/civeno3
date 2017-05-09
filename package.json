@@ -26,6 +26,7 @@
     "babel-preset-env": "^1.4.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
-    "lc-hoc": "^1.1.1"
+    "lc-hoc": "^1.1.1",
+    "styled-jsx": "^0.5.7"
   }
 }
