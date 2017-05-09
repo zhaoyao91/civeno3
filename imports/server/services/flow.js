@@ -1,7 +1,6 @@
 import { prop } from 'lodash/fp'
 import { check, Match } from 'meteor/check'
 
-import Condition from './lib/condition'
 import Flows from '../collections/flows'
 import FlowUserRelations from '../collections/flow_user_relations'
 import UserService from './user'
@@ -56,17 +55,7 @@ const FlowService = {
   queries: {},
 
   conditions: {
-    flowExists: new Condition((flowId) => {
-      return Flows.find({_id: flowId}, {fields: {_id: 1}, limit: 1}).count() > 0
-    }, 'no-flow', 'cannot find this flow'),
 
-    flowHasOwner: new Condition((flowId) => {
-      return FlowUserRelations.find({type: 'owner', flowId}, {fields: {_id: 1}, limit: 1}).count() > 0
-    }, 'flow-has-no-owner', 'flow does not has any owner'),
-
-    flowHasNoOwner: new Condition((flowId) => {
-      return !FlowService.conditions.flowHasOwner.judge(flowId)
-    }, 'flow-has-owner', 'flow already has owner')
   },
 
   // update

@@ -82,22 +82,21 @@ const SearchUserInput = compose(
   withState('loading', 'setLoading', false),
   withHandlers({
     findUser: ({onNoUser, onFindUser, setLoading}) => debounce(750, email => {
-        if (isEmail(email)) {
-          setLoading(true)
-          Meteor.call('User.findUserByEmail', email, (err, user) => {
-            setLoading(false)
-            if (err) {
-              console.error(err)
-              Alert.error('查找用户失败')
-            } else if (user) {
-              onFindUser(user)
-            } else {
-              onNoUser()
-            }
-          })
-        }
+      if (isEmail(email)) {
+        setLoading(true)
+        Meteor.call('User.findUserProfileByEmail', email, (err, user) => {
+          setLoading(false)
+          if (err) {
+            console.error(err)
+            Alert.error('查找用户失败')
+          } else if (user) {
+            onFindUser(user)
+          } else {
+            onNoUser()
+          }
+        })
       }
-    )
+    })
   }),
   withHandlers({
     onEmailChange: ({findUser, onRevokeUser}) => e => {

@@ -1,6 +1,5 @@
 import FlowService from './flow'
 
-import Condition from './lib/condition'
 
 const PermissionService = {
   user: {

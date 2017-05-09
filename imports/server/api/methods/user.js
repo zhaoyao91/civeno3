@@ -2,11 +2,18 @@ import { Meteor } from 'meteor/meteor'
 import { check } from 'meteor/check'
 import { pick } from 'lodash/fp'
 
-import PermissionService from '../../services/permission'
 import UserService from '../../services/user'
+import { testPermission, permissions } from '../../permission'
 
 Meteor.methods({
   /**
+   * update user profile name
+   *
+   * @require-auth
+   * @require-perm UPDATE_USER_PROFILE_NAME
+   * @precondition user exists
+   * @effect user profile name was updated
+   *
    * @param userId
    * @param name
    */
@@ -15,28 +22,31 @@ Meteor.methods({
     check(name, String)
 
     if (!this.userId) {
-      throw new Meteor.Error('no-permission.not-authenticated', 'user must login')
-    } else if (!PermissionService.user.allowUpdateUserProfile(this.userId, userId)) {
-      throw new Meteor.Error('no-permission.not-authorized', 'user is not allowed to update this user\'s profile')
+      throw new Meteor.Error('not-authenticated', 'user must login')
+    }
+    if (!testPermission(this.userId, permissions.updateUserProfileName(userId))) {
+      throw new Meteor.Error('no-permission', 'user is not allowed to update this user\'s profile name')
     }
 
-    UserService.updateProfileName(userId, name)
+    UserService.actions.updateProfileName(userId, name)
   },
 
   /**
-   * find user by email
-   * only return its profile
+   * find user profile by email
+   *
+   * @require-auth
+   *
    * @param email
-   * @returns user | null
+   * @return {object | null} user // only with _id and profile
    */
-  'User.findUserByEmail'(email) {
+  'User.findUserProfileByEmail'(email) {
     check(email, String)
 
     if (!this.userId) {
-      throw new Meteor.Error('no-permission.not-authenticated', 'user must login')
+      throw new Meteor.Error('not-authenticated', 'user must login')
     }
 
-    const user = UserService.findUserByEmail(email)
+    const user = UserService.queries.findUserByEmail(email)
 
     if (user) return pick(['_id', 'profile'], user)
     else return null
